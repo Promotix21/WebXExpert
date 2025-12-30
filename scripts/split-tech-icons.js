@@ -2,41 +2,21 @@ const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs');
 
-// Grid configuration based on the image analysis
+// The image is 1020x773 with 6 columns and 4 rows
 const COLS = 6;
 const ROWS = 4;
+const OUTPUT_SIZE = 128; // Final output size
 
-// Icon mapping - position to filename (row, col) starting from 0
-// Based on the visual analysis of the image
-const iconMapping = [
+// Icon names mapping
+const iconNames = [
   // Row 0
-  { row: 0, col: 0, name: 'nextjs' },
-  { row: 0, col: 1, name: 'react' },
-  { row: 0, col: 2, name: 'remix' },      // The cycle icon
-  { row: 0, col: 3, name: 'typescript' },
-  { row: 0, col: 4, name: 'tailwind' },
-  { row: 0, col: 5, name: 'gsap' },
+  ['nextjs', 'react', 'remix', 'typescript', 'tailwind', 'gsap'],
   // Row 1
-  { row: 1, col: 0, name: 'threejs' },    // Network/3D looking icon
-  { row: 1, col: 1, name: 'nodejs' },
-  { row: 1, col: 2, name: 'nodejs-alt' }, // Node with leaf
-  { row: 1, col: 3, name: 'nestjs' },
-  { row: 1, col: 4, name: 'postgresql' },
-  { row: 1, col: 5, name: 'mongodb' },
+  ['threejs', 'nodejs', 'nodejs-alt', 'nestjs', 'postgresql', 'mongodb'],
   // Row 2
-  { row: 2, col: 0, name: 'aws' },
-  { row: 2, col: 1, name: 'docker' },
-  { row: 2, col: 2, name: 'n8n' },
-  { row: 2, col: 3, name: 'vercel' },
-  { row: 2, col: 4, name: 'deno' },       // Squirrel icon
-  { row: 2, col: 5, name: 'redis' },
+  ['aws', 'docker', 'n8n', 'vercel', 'deno', 'redis'],
   // Row 3
-  { row: 3, col: 0, name: 'graphql' },
-  { row: 3, col: 1, name: 'discord' },    // Chat bubble
-  { row: 3, col: 2, name: 'grammarly' },  // G icon
-  { row: 3, col: 3, name: 'vercel-alt' }, // Triangle
-  { row: 3, col: 4, name: 'solidity' },   // Triangle variant
-  { row: 3, col: 5, name: 'algolia' },    // Search icon
+  ['graphql', 'discord', 'grammarly', 'vercel-alt', 'solidity', 'algolia'],
 ];
 
 async function splitIcons() {
@@ -50,31 +30,61 @@ async function splitIcons() {
 
   // Get image metadata
   const metadata = await sharp(inputPath).metadata();
-  console.log(`Image dimensions: ${metadata.width}x${metadata.height}`);
+  const imgWidth = metadata.width;
+  const imgHeight = metadata.height;
 
-  // Calculate icon size (assuming equal spacing)
-  const iconWidth = Math.floor(metadata.width / COLS);
-  const iconHeight = Math.floor(metadata.height / ROWS);
-  console.log(`Icon size: ${iconWidth}x${iconHeight}`);
+  console.log(`Image dimensions: ${imgWidth}x${imgHeight}`);
+
+  // Calculate cell dimensions
+  const cellWidth = imgWidth / COLS;
+  const cellHeight = imgHeight / ROWS;
+
+  console.log(`Cell size: ${cellWidth.toFixed(1)}x${cellHeight.toFixed(1)}`);
+  console.log(`Output size: ${OUTPUT_SIZE}x${OUTPUT_SIZE}px\n`);
 
   // Extract each icon
-  for (const icon of iconMapping) {
-    const left = icon.col * iconWidth;
-    const top = icon.row * iconHeight;
+  for (let row = 0; row < ROWS; row++) {
+    for (let col = 0; col < COLS; col++) {
+      const name = iconNames[row][col];
 
-    const outputPath = path.join(outputDir, `${icon.name}.png`);
+      // Calculate cell bounds
+      const cellLeft = Math.round(col * cellWidth);
+      const cellTop = Math.round(row * cellHeight);
+      const cellRight = Math.round((col + 1) * cellWidth);
+      const cellBottom = Math.round((row + 1) * cellHeight);
 
-    await sharp(inputPath)
-      .extract({
-        left: left,
-        top: top,
-        width: iconWidth,
-        height: iconHeight,
-      })
-      .png()
-      .toFile(outputPath);
+      // Extract the full cell
+      const extractWidth = cellRight - cellLeft;
+      const extractHeight = cellBottom - cellTop;
 
-    console.log(`Extracted: ${icon.name}.png`);
+      const outputPath = path.join(outputDir, `${name}.png`);
+
+      try {
+        await sharp(inputPath)
+          .extract({
+            left: cellLeft,
+            top: cellTop,
+            width: extractWidth,
+            height: extractHeight,
+          })
+          // Trim transparent/white edges to get just the icon
+          .trim({
+            background: '#FFFFFF',
+            threshold: 50,
+          })
+          // Resize to uniform output size with padding if needed
+          .resize(OUTPUT_SIZE, OUTPUT_SIZE, {
+            fit: 'contain',
+            background: { r: 0, g: 0, b: 0, alpha: 0 },
+          })
+          .png()
+          .toFile(outputPath);
+
+        console.log(`✓ Extracted: ${name}.png (cell: ${cellLeft},${cellTop} ${extractWidth}x${extractHeight})`);
+      } catch (err) {
+        console.error(`✗ Failed: ${name}.png - ${err.message}`);
+      }
+    }
   }
 
   console.log('\nAll icons extracted successfully!');
