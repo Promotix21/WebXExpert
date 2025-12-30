@@ -48,14 +48,14 @@ export function About() {
       className="section-padding bg-surface-000 relative overflow-hidden"
     >
       {/* Background accent */}
-      <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-brand-pink-500/5 to-transparent pointer-events-none" />
+      <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-brand-cyan-500/5 to-transparent pointer-events-none" />
 
       <div className="container-main relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Left: Content */}
           <div>
             <Reveal>
-              <span className="text-sm text-brand-pink-500 font-medium tracking-widest uppercase mb-4 block">
+              <span className="text-sm text-brand-cyan-500 font-medium tracking-widest uppercase mb-4 block">
                 Why WebXExpert
               </span>
             </Reveal>
@@ -85,7 +85,7 @@ export function About() {
               {strengths.map((strength, i) => (
                 <StaggerItem key={i}>
                   <div className="group">
-                    <h4 className="text-base md:text-lg font-semibold mb-2 group-hover:text-brand-pink-500 transition-colors">
+                    <h4 className="text-base md:text-lg font-semibold mb-2 group-hover:text-brand-cyan-500 transition-colors">
                       {strength.title}
                     </h4>
                     <p className="text-xs md:text-sm text-neutral-500 leading-relaxed">
@@ -106,7 +106,7 @@ export function About() {
                   <div
                     className="w-full h-full"
                     style={{
-                      backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,0,128,0.1) 10px, rgba(255,0,128,0.1) 11px)`,
+                      backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,212,255,0.1) 10px, rgba(0,212,255,0.1) 11px)`,
                     }}
                   />
                 </div>
@@ -127,7 +127,7 @@ export function About() {
 
             {/* Floating badge */}
             <Reveal delay={0.8}>
-              <div className="absolute -bottom-4 -right-4 md:-bottom-6 md:-right-6 bg-brand-pink-500 text-white px-4 py-2 md:px-6 md:py-3 rounded-full text-xs md:text-sm font-bold shadow-glow-md">
+              <div className="absolute -bottom-4 -right-4 md:-bottom-6 md:-right-6 bg-brand-cyan-500 text-white px-4 py-2 md:px-6 md:py-3 rounded-full text-xs md:text-sm font-bold shadow-glow-md">
                 Since 2007
               </div>
             </Reveal>

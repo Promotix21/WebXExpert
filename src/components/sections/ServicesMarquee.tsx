@@ -26,7 +26,7 @@ export function ServicesMarquee() {
         direction="left"
         textClassName="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-neutral-600 hover:text-white transition-colors duration-300"
         separator={
-          <span className="text-brand-pink-500 mx-3 sm:mx-4 md:mx-6 text-lg sm:text-xl md:text-2xl">
+          <span className="text-brand-cyan-500 mx-3 sm:mx-4 md:mx-6 text-lg sm:text-xl md:text-2xl">
             ✦
           </span>
         }

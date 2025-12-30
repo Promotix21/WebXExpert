@@ -57,7 +57,7 @@ export function Header() {
       // CTA button glow pulse
       if (ctaRef.current) {
         gsap.to(ctaRef.current, {
-          boxShadow: "0 0 30px rgba(255, 0, 128, 0.5)",
+          boxShadow: "0 0 30px rgba(0, 212, 255, 0.5)",
           duration: 1.5,
           repeat: -1,
           yoyo: true,
@@ -189,7 +189,7 @@ export function Header() {
                   priority
                 />
                 {/* Hover glow effect */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-lg bg-gradient-to-r from-brand-pink-500/30 to-brand-cyan-500/30" />
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-lg bg-gradient-to-r from-brand-cyan-500/30 to-brand-cyan-500/30" />
               </div>
             </Link>
 
@@ -206,7 +206,7 @@ export function Header() {
             <div className="hidden lg:block">
               <button
                 ref={ctaRef}
-                className="relative px-6 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-brand-pink-500 to-brand-pink-600 rounded-full overflow-hidden group"
+                className="relative px-6 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-brand-cyan-500 to-brand-cyan-600 rounded-full overflow-hidden group"
               >
                 <span className="relative z-10">Start Project</span>
                 {/* Shine effect */}
@@ -254,7 +254,7 @@ export function Header() {
         )}
       >
         {/* Gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-brand-pink-500/10 via-transparent to-brand-cyan-500/10" />
+        <div className="absolute inset-0 bg-gradient-to-br from-brand-cyan-500/10 via-transparent to-brand-cyan-500/10" />
 
         <div className="h-full flex flex-col justify-center items-center px-6 relative">
           <nav className="flex flex-col items-center gap-8">
@@ -266,10 +266,10 @@ export function Header() {
                 }}
                 href={item.href}
                 onClick={closeMobileMenu}
-                className="text-4xl md:text-5xl font-bold text-white hover:text-brand-pink-500 transition-colors relative group"
+                className="text-4xl md:text-5xl font-bold text-white hover:text-brand-cyan-500 transition-colors relative group"
               >
                 <span className="relative z-10">{item.label}</span>
-                <span className="absolute -bottom-2 left-0 w-0 h-1 bg-gradient-to-r from-brand-pink-500 to-brand-cyan-500 group-hover:w-full transition-all duration-300" />
+                <span className="absolute -bottom-2 left-0 w-0 h-1 bg-gradient-to-r from-brand-cyan-500 to-brand-cyan-500 group-hover:w-full transition-all duration-300" />
               </a>
             ))}
           </nav>
@@ -278,7 +278,7 @@ export function Header() {
             ref={(el) => {
               menuItemsRef.current[navItems.length] = el as unknown as HTMLAnchorElement;
             }}
-            className="mt-12 px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-brand-pink-500 to-brand-pink-600 rounded-full"
+            className="mt-12 px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-brand-cyan-500 to-brand-cyan-600 rounded-full"
             onClick={closeMobileMenu}
           >
             Start Project
@@ -293,7 +293,7 @@ export function Header() {
           >
             <a
               href="mailto:hello@webxexpert.com"
-              className="hover:text-brand-pink-500 transition-colors"
+              className="hover:text-brand-cyan-500 transition-colors"
             >
               hello@webxexpert.com
             </a>
@@ -344,7 +344,7 @@ function NavLink({
     >
       {children}
       {/* Animated underline */}
-      <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-brand-pink-500 to-brand-cyan-500 group-hover:w-3/4 transition-all duration-300 rounded-full" />
+      <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-brand-cyan-500 to-brand-cyan-500 group-hover:w-3/4 transition-all duration-300 rounded-full" />
       {/* Hover glow */}
       <span className="absolute inset-0 rounded-lg bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
     </a>
