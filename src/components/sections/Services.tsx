@@ -18,7 +18,6 @@ const services = [
       "Award-worthy designs with GSAP animations, WebGL experiences, and interactions that captivate. Every pixel crafted with purpose.",
     features: ["Motion Design & GSAP", "WebGL & Three.js", "Responsive & Mobile-First", "Conversion-Focused UX"],
     color: "pink",
-    visual: "design",
   },
   {
     id: "development",
@@ -28,7 +27,6 @@ const services = [
       "Full-stack expertise in Next.js, NestJS, React, and beyond. We build scalable, performant applications that power your business.",
     features: ["Next.js & React", "Node.js & NestJS", "Headless CMS", "API Development"],
     color: "cyan",
-    visual: "code",
   },
   {
     id: "software",
@@ -38,7 +36,6 @@ const services = [
       "CRMs, ERPs, dashboards, and internal tools built from scratch. If you can imagine it, we can build it.",
     features: ["CRM & ERP Systems", "Dashboard Development", "Workflow Automation", "Real-time Applications"],
     color: "purple",
-    visual: "dashboard",
   },
   {
     id: "integrations",
@@ -48,7 +45,6 @@ const services = [
       "Connect any system to anything. APIs, webhooks, automation workflows—if it exists, we can integrate it.",
     features: ["API Integrations", "N8N & Automation", "Payment Gateways", "Third-party Services"],
     color: "cyan",
-    visual: "connect",
   },
 ];
 
@@ -89,86 +85,6 @@ export function Services() {
           pin: true,
           pinSpacing: isLast,
         });
-      });
-
-      // Animate visuals on each card
-      cards.forEach((card) => {
-        const visual = card.querySelector(".service-visual");
-        const lines = card.querySelectorAll(".visual-line");
-        const dots = card.querySelectorAll(".visual-dot");
-        const bars = card.querySelectorAll(".visual-bar");
-
-        if (visual) {
-          gsap.fromTo(
-            visual,
-            { opacity: 0, scale: 0.8 },
-            {
-              opacity: 1,
-              scale: 1,
-              duration: 0.8,
-              ease: "power3.out",
-              scrollTrigger: {
-                trigger: card,
-                start: "top 60%",
-                toggleActions: "play none none reverse",
-              },
-            }
-          );
-        }
-
-        if (lines.length) {
-          gsap.fromTo(
-            lines,
-            { scaleX: 0 },
-            {
-              scaleX: 1,
-              duration: 0.6,
-              stagger: 0.1,
-              ease: "power2.out",
-              scrollTrigger: {
-                trigger: card,
-                start: "top 50%",
-                toggleActions: "play none none reverse",
-              },
-            }
-          );
-        }
-
-        if (dots.length) {
-          gsap.fromTo(
-            dots,
-            { scale: 0 },
-            {
-              scale: 1,
-              duration: 0.4,
-              stagger: 0.05,
-              ease: "back.out(1.7)",
-              scrollTrigger: {
-                trigger: card,
-                start: "top 50%",
-                toggleActions: "play none none reverse",
-              },
-            }
-          );
-        }
-
-        if (bars.length) {
-          gsap.fromTo(
-            bars,
-            { scaleY: 0 },
-            {
-              scaleY: 1,
-              duration: 0.5,
-              stagger: 0.08,
-              ease: "power2.out",
-              scrollTrigger: {
-                trigger: card,
-                start: "top 50%",
-                toggleActions: "play none none reverse",
-              },
-            }
-          );
-        }
       });
     }, section);
 
@@ -218,7 +134,7 @@ export function Services() {
 
   return (
     <section ref={sectionRef} id="services" className="bg-black relative">
-      {/* Section Header - Fixed */}
+      {/* Section Header */}
       <div className="container-main pt-20 md:pt-32 pb-12">
         <div className="max-w-3xl">
           <span className="text-sm text-brand-pink-500 font-medium tracking-widest uppercase mb-4 block">
@@ -232,8 +148,7 @@ export function Services() {
             Digital Products
           </h2>
           <p className="text-lg text-neutral-400">
-            From concept to deployment, we craft digital experiences that perform. Every project is an opportunity to
-            push boundaries.
+            From concept to deployment, we craft digital experiences that perform.
           </p>
         </div>
       </div>
@@ -246,10 +161,7 @@ export function Services() {
           return (
             <div
               key={service.id}
-              className={cn(
-                "service-card min-h-screen flex items-center py-12",
-                "bg-black"
-              )}
+              className="service-card min-h-screen flex items-center py-12 bg-black"
             >
               <div className="container-main">
                 <div
@@ -263,13 +175,11 @@ export function Services() {
                 >
                   {/* Content */}
                   <div className={index % 2 === 1 ? "lg:order-2" : ""}>
-                    <div className="flex items-center gap-4 mb-6">
-                      <span className={cn("text-6xl md:text-7xl font-bold opacity-20", colors.text)}>
-                        {service.number}
-                      </span>
-                    </div>
+                    <span className={cn("text-7xl md:text-8xl font-bold opacity-20", colors.text)}>
+                      {service.number}
+                    </span>
 
-                    <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">{service.title}</h3>
+                    <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 -mt-4">{service.title}</h3>
 
                     <p className="text-lg text-neutral-400 mb-8 leading-relaxed">{service.description}</p>
 
@@ -293,9 +203,9 @@ export function Services() {
                     </button>
                   </div>
 
-                  {/* Visual Animation */}
-                  <div className={cn("service-visual", index % 2 === 1 ? "lg:order-1" : "")}>
-                    <ServiceVisual type={service.visual} color={colors.accent} />
+                  {/* Animated Visual */}
+                  <div className={cn("relative", index % 2 === 1 ? "lg:order-1" : "")}>
+                    <ServiceAnimation type={service.id} color={colors.accent} />
                   </div>
                 </div>
               </div>
@@ -308,166 +218,341 @@ export function Services() {
 }
 
 /**
- * Service Visual Component - Animated SVG representation of each service
+ * Service Animation Component - Animated representation of each service
  */
-function ServiceVisual({ type, color }: { type: string; color: string }) {
-  switch (type) {
-    case "design":
-      return (
-        <div className="relative aspect-square w-full max-w-md mx-auto">
-          <svg viewBox="0 0 200 200" className="w-full h-full">
-            {/* Browser frame */}
-            <rect
-              x="20"
-              y="20"
-              width="160"
-              height="120"
-              rx="8"
-              fill="none"
-              stroke={color}
-              strokeWidth="2"
-              opacity="0.5"
-            />
-            {/* Browser header */}
-            <rect x="20" y="20" width="160" height="20" rx="8" fill={color} opacity="0.2" />
-            <circle className="visual-dot" cx="35" cy="30" r="3" fill={color} />
-            <circle className="visual-dot" cx="48" cy="30" r="3" fill={color} />
-            <circle className="visual-dot" cx="61" cy="30" r="3" fill={color} />
+function ServiceAnimation({ type, color }: { type: string; color: string }) {
+  const containerRef = useRef<HTMLDivElement>(null);
 
-            {/* Design elements */}
-            <rect className="visual-line" x="30" y="50" width="60" height="8" rx="2" fill={color} opacity="0.6" style={{ transformOrigin: "30px 54px" }} />
-            <rect className="visual-line" x="30" y="65" width="100" height="4" rx="1" fill={color} opacity="0.3" style={{ transformOrigin: "30px 67px" }} />
-            <rect className="visual-line" x="30" y="75" width="80" height="4" rx="1" fill={color} opacity="0.3" style={{ transformOrigin: "30px 77px" }} />
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
 
-            {/* Image placeholder */}
-            <rect className="visual-bar" x="30" y="90" width="50" height="40" rx="4" fill={color} opacity="0.4" style={{ transformOrigin: "55px 130px" }} />
-            <rect className="visual-bar" x="90" y="90" width="80" height="18" rx="2" fill={color} opacity="0.2" style={{ transformOrigin: "130px 130px" }} />
-            <rect className="visual-bar" x="90" y="115" width="60" height="15" rx="2" fill={color} opacity="0.3" style={{ transformOrigin: "120px 130px" }} />
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: container,
+          start: "top 60%",
+          toggleActions: "play none none reverse",
+        },
+      });
 
-            {/* Cursor */}
-            <path d="M150 100 L160 115 L155 115 L158 125 L154 126 L151 116 L147 120 Z" fill={color} className="visual-dot" />
-          </svg>
+      switch (type) {
+        case "design":
+          // Wireframe building animation
+          tl.fromTo(".wireframe-block",
+            { scaleY: 0, opacity: 0 },
+            { scaleY: 1, opacity: 1, duration: 0.4, stagger: 0.1, ease: "power2.out" }
+          )
+          .fromTo(".wireframe-line",
+            { scaleX: 0 },
+            { scaleX: 1, duration: 0.3, stagger: 0.05, ease: "power2.out" },
+            "-=0.3"
+          )
+          .fromTo(".wireframe-cursor",
+            { scale: 0, opacity: 0 },
+            { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(1.7)" },
+            "-=0.2"
+          )
+          .to(".wireframe-cursor", {
+            x: 50, y: 30, duration: 1.5, ease: "power1.inOut", repeat: -1, yoyo: true
+          });
+          break;
+
+        case "development":
+          // Code typing animation
+          tl.fromTo(".code-line",
+            { width: 0, opacity: 0 },
+            { width: "100%", opacity: 1, duration: 0.5, stagger: 0.15, ease: "none" }
+          )
+          .fromTo(".cursor-blink",
+            { opacity: 0 },
+            { opacity: 1, duration: 0.5, repeat: -1, yoyo: true, ease: "steps(1)" },
+            "-=0.5"
+          );
+          break;
+
+        case "software":
+          // Dashboard assembling animation
+          tl.fromTo(".dash-sidebar",
+            { x: -50, opacity: 0 },
+            { x: 0, opacity: 1, duration: 0.5, ease: "power2.out" }
+          )
+          .fromTo(".dash-card",
+            { y: -20, opacity: 0, scale: 0.8 },
+            { y: 0, opacity: 1, scale: 1, duration: 0.4, stagger: 0.1, ease: "back.out(1.7)" },
+            "-=0.3"
+          )
+          .fromTo(".dash-bar",
+            { scaleY: 0 },
+            { scaleY: 1, duration: 0.5, stagger: 0.08, ease: "power2.out" },
+            "-=0.2"
+          )
+          .fromTo(".dash-table-row",
+            { x: 20, opacity: 0 },
+            { x: 0, opacity: 1, duration: 0.3, stagger: 0.08, ease: "power2.out" },
+            "-=0.3"
+          );
+          break;
+
+        case "integrations":
+          // Nodes connecting animation
+          tl.fromTo(".int-center",
+            { scale: 0, opacity: 0 },
+            { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.7)" }
+          )
+          .fromTo(".int-node",
+            { scale: 0, opacity: 0 },
+            { scale: 1, opacity: 1, duration: 0.4, stagger: 0.1, ease: "back.out(1.7)" },
+            "-=0.2"
+          )
+          .fromTo(".int-line",
+            { strokeDashoffset: 100 },
+            { strokeDashoffset: 0, duration: 0.6, stagger: 0.1, ease: "power2.out" },
+            "-=0.5"
+          )
+          .fromTo(".int-pulse",
+            { scale: 1, opacity: 0.5 },
+            { scale: 1.5, opacity: 0, duration: 1, repeat: -1, ease: "power1.out" },
+            "-=0.3"
+          );
+          break;
+      }
+    }, container);
+
+    return () => ctx.revert();
+  }, [type]);
+
+  return (
+    <div ref={containerRef} className="relative aspect-square w-full max-w-lg mx-auto">
+      {/* Background glow */}
+      <div
+        className="absolute inset-0 rounded-3xl opacity-20 blur-3xl"
+        style={{ background: `radial-gradient(circle, ${color} 0%, transparent 70%)` }}
+      />
+
+      {/* Animation container */}
+      <div className="relative w-full h-full bg-surface-100/30 rounded-3xl border border-surface-300/30 overflow-hidden p-8">
+        {type === "design" && <WireframeAnimation color={color} />}
+        {type === "development" && <CodeAnimation color={color} />}
+        {type === "software" && <DashboardAnimation color={color} />}
+        {type === "integrations" && <IntegrationAnimation color={color} />}
+      </div>
+    </div>
+  );
+}
+
+// Wireframe Building Animation
+function WireframeAnimation({ color }: { color: string }) {
+  return (
+    <div className="w-full h-full relative">
+      {/* Browser frame */}
+      <div className="absolute inset-4 border-2 rounded-xl" style={{ borderColor: color, opacity: 0.3 }}>
+        {/* Browser header */}
+        <div className="h-8 border-b flex items-center gap-2 px-3" style={{ borderColor: color, opacity: 0.3 }}>
+          <div className="w-2 h-2 rounded-full" style={{ background: color }} />
+          <div className="w-2 h-2 rounded-full" style={{ background: color, opacity: 0.6 }} />
+          <div className="w-2 h-2 rounded-full" style={{ background: color, opacity: 0.3 }} />
         </div>
-      );
 
-    case "code":
-      return (
-        <div className="relative aspect-square w-full max-w-md mx-auto">
-          <svg viewBox="0 0 200 200" className="w-full h-full">
-            {/* Terminal frame */}
-            <rect
-              x="20"
-              y="20"
-              width="160"
-              height="160"
-              rx="8"
-              fill="none"
-              stroke={color}
-              strokeWidth="2"
-              opacity="0.5"
-            />
-            <rect x="20" y="20" width="160" height="24" rx="8" fill={color} opacity="0.2" />
-            <circle className="visual-dot" cx="35" cy="32" r="4" fill={color} />
-            <circle className="visual-dot" cx="50" cy="32" r="4" fill={color} />
-            <circle className="visual-dot" cx="65" cy="32" r="4" fill={color} />
+        {/* Content blocks */}
+        <div className="p-4 space-y-3">
+          {/* Header block */}
+          <div className="wireframe-block h-12 rounded-lg origin-top" style={{ background: color, opacity: 0.4 }} />
 
-            {/* Code lines */}
-            <rect className="visual-line" x="30" y="55" width="20" height="4" rx="1" fill={color} opacity="0.6" style={{ transformOrigin: "30px 57px" }} />
-            <rect className="visual-line" x="55" y="55" width="60" height="4" rx="1" fill="#00D4FF" opacity="0.5" style={{ transformOrigin: "55px 57px" }} />
+          {/* Nav lines */}
+          <div className="flex gap-2">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="wireframe-line h-2 flex-1 rounded origin-left" style={{ background: color, opacity: 0.3 }} />
+            ))}
+          </div>
 
-            <rect className="visual-line" x="40" y="70" width="15" height="4" rx="1" fill={color} opacity="0.4" style={{ transformOrigin: "40px 72px" }} />
-            <rect className="visual-line" x="60" y="70" width="80" height="4" rx="1" fill={color} opacity="0.6" style={{ transformOrigin: "60px 72px" }} />
+          {/* Hero block */}
+          <div className="wireframe-block h-24 rounded-lg origin-top" style={{ background: color, opacity: 0.2 }} />
 
-            <rect className="visual-line" x="40" y="85" width="25" height="4" rx="1" fill="#7C3AED" opacity="0.5" style={{ transformOrigin: "40px 87px" }} />
-            <rect className="visual-line" x="70" y="85" width="50" height="4" rx="1" fill={color} opacity="0.4" style={{ transformOrigin: "70px 87px" }} />
+          {/* Content grid */}
+          <div className="grid grid-cols-3 gap-2">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="wireframe-block h-16 rounded-lg origin-top" style={{ background: color, opacity: 0.25 }} />
+            ))}
+          </div>
 
-            <rect className="visual-line" x="40" y="100" width="40" height="4" rx="1" fill={color} opacity="0.5" style={{ transformOrigin: "40px 102px" }} />
-            <rect className="visual-line" x="85" y="100" width="30" height="4" rx="1" fill="#00D4FF" opacity="0.4" style={{ transformOrigin: "85px 102px" }} />
-
-            <rect className="visual-line" x="30" y="115" width="15" height="4" rx="1" fill={color} opacity="0.6" style={{ transformOrigin: "30px 117px" }} />
-
-            <rect className="visual-line" x="30" y="135" width="100" height="4" rx="1" fill={color} opacity="0.3" style={{ transformOrigin: "30px 137px" }} />
-            <rect className="visual-line" x="30" y="150" width="70" height="4" rx="1" fill="#7C3AED" opacity="0.4" style={{ transformOrigin: "30px 152px" }} />
-            <rect className="visual-line" x="30" y="165" width="40" height="4" rx="1" fill={color} opacity="0.5" style={{ transformOrigin: "30px 167px" }} />
-          </svg>
+          {/* Text lines */}
+          <div className="space-y-2">
+            <div className="wireframe-line h-2 w-full rounded origin-left" style={{ background: color, opacity: 0.2 }} />
+            <div className="wireframe-line h-2 w-3/4 rounded origin-left" style={{ background: color, opacity: 0.2 }} />
+            <div className="wireframe-line h-2 w-1/2 rounded origin-left" style={{ background: color, opacity: 0.2 }} />
+          </div>
         </div>
-      );
+      </div>
 
-    case "dashboard":
-      return (
-        <div className="relative aspect-square w-full max-w-md mx-auto">
-          <svg viewBox="0 0 200 200" className="w-full h-full">
-            {/* Dashboard frame */}
-            <rect x="10" y="10" width="180" height="180" rx="8" fill="none" stroke={color} strokeWidth="2" opacity="0.5" />
+      {/* Cursor */}
+      <div className="wireframe-cursor absolute top-1/2 left-1/2">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill={color}>
+          <path d="M4 4l16 6-6 2-2 6-8-14z" />
+        </svg>
+      </div>
+    </div>
+  );
+}
 
-            {/* Sidebar */}
-            <rect x="10" y="10" width="40" height="180" rx="8" fill={color} opacity="0.1" />
-            <circle className="visual-dot" cx="30" cy="35" r="8" fill={color} opacity="0.5" />
-            <rect className="visual-line" x="18" y="55" width="24" height="3" rx="1" fill={color} opacity="0.3" style={{ transformOrigin: "18px 56px" }} />
-            <rect className="visual-line" x="18" y="70" width="24" height="3" rx="1" fill={color} opacity="0.3" style={{ transformOrigin: "18px 71px" }} />
-            <rect className="visual-line" x="18" y="85" width="24" height="3" rx="1" fill={color} opacity="0.3" style={{ transformOrigin: "18px 86px" }} />
+// Code Typing Animation
+function CodeAnimation({ color }: { color: string }) {
+  const codeLines = [
+    { indent: 0, keyword: "function", text: " buildAwesome() {", kwColor: "#FF0080" },
+    { indent: 1, keyword: "const", text: " design = ", value: "'pixel-perfect'", kwColor: "#00D4FF" },
+    { indent: 1, keyword: "const", text: " code = ", value: "'clean'", kwColor: "#00D4FF" },
+    { indent: 1, keyword: "const", text: " result = ", value: "'extraordinary'", kwColor: "#00D4FF" },
+    { indent: 1, keyword: "", text: "" },
+    { indent: 1, keyword: "return", text: " magic(design, code)", kwColor: "#7C3AED" },
+    { indent: 0, keyword: "}", text: "", kwColor: "#FF0080" },
+  ];
 
-            {/* Stats cards */}
-            <rect className="visual-bar" x="60" y="25" width="55" height="35" rx="4" fill={color} opacity="0.2" style={{ transformOrigin: "87px 60px" }} />
-            <rect className="visual-bar" x="125" y="25" width="55" height="35" rx="4" fill="#00D4FF" opacity="0.2" style={{ transformOrigin: "152px 60px" }} />
+  return (
+    <div className="w-full h-full font-mono text-sm">
+      {/* Terminal header */}
+      <div className="flex items-center gap-2 mb-4 pb-2 border-b border-surface-300/30">
+        <div className="w-3 h-3 rounded-full bg-red-500/70" />
+        <div className="w-3 h-3 rounded-full bg-yellow-500/70" />
+        <div className="w-3 h-3 rounded-full bg-green-500/70" />
+        <span className="ml-2 text-xs text-neutral-500">index.tsx</span>
+      </div>
 
-            {/* Chart */}
-            <rect x="60" y="70" width="120" height="60" rx="4" fill={color} opacity="0.1" />
-            <rect className="visual-bar" x="70" y="105" width="12" height="20" rx="2" fill={color} opacity="0.6" style={{ transformOrigin: "76px 125px" }} />
-            <rect className="visual-bar" x="90" y="95" width="12" height="30" rx="2" fill={color} opacity="0.7" style={{ transformOrigin: "96px 125px" }} />
-            <rect className="visual-bar" x="110" y="85" width="12" height="40" rx="2" fill={color} opacity="0.8" style={{ transformOrigin: "116px 125px" }} />
-            <rect className="visual-bar" x="130" y="90" width="12" height="35" rx="2" fill={color} opacity="0.7" style={{ transformOrigin: "136px 125px" }} />
-            <rect className="visual-bar" x="150" y="80" width="12" height="45" rx="2" fill={color} opacity="0.9" style={{ transformOrigin: "156px 125px" }} />
-
-            {/* Table */}
-            <rect x="60" y="140" width="120" height="45" rx="4" fill={color} opacity="0.1" />
-            <rect className="visual-line" x="70" y="150" width="100" height="3" rx="1" fill={color} opacity="0.4" style={{ transformOrigin: "70px 151px" }} />
-            <rect className="visual-line" x="70" y="160" width="80" height="3" rx="1" fill={color} opacity="0.3" style={{ transformOrigin: "70px 161px" }} />
-            <rect className="visual-line" x="70" y="170" width="60" height="3" rx="1" fill={color} opacity="0.3" style={{ transformOrigin: "70px 171px" }} />
-          </svg>
+      {/* Code lines */}
+      <div className="space-y-1.5">
+        {codeLines.map((line, i) => (
+          <div key={i} className="flex items-center" style={{ paddingLeft: `${line.indent * 20}px` }}>
+            <span className="text-neutral-600 w-6 text-right mr-4 select-none">{i + 1}</span>
+            <div className="code-line overflow-hidden whitespace-nowrap">
+              {line.keyword && <span style={{ color: line.kwColor }}>{line.keyword}</span>}
+              <span className="text-neutral-300">{line.text}</span>
+              {line.value && <span style={{ color: "#98C379" }}>{line.value}</span>}
+            </div>
+          </div>
+        ))}
+        {/* Blinking cursor */}
+        <div className="flex items-center" style={{ paddingLeft: "20px" }}>
+          <span className="text-neutral-600 w-6 text-right mr-4 select-none">8</span>
+          <span className="cursor-blink w-2 h-5" style={{ background: color }} />
         </div>
-      );
+      </div>
+    </div>
+  );
+}
 
-    case "connect":
-      return (
-        <div className="relative aspect-square w-full max-w-md mx-auto">
-          <svg viewBox="0 0 200 200" className="w-full h-full">
-            {/* Central hub */}
-            <circle className="visual-dot" cx="100" cy="100" r="25" fill={color} opacity="0.3" />
-            <circle className="visual-dot" cx="100" cy="100" r="15" fill={color} opacity="0.6" />
-            <circle className="visual-dot" cx="100" cy="100" r="5" fill={color} />
+// Dashboard Assembling Animation
+function DashboardAnimation({ color }: { color: string }) {
+  return (
+    <div className="w-full h-full flex gap-3">
+      {/* Sidebar */}
+      <div className="dash-sidebar w-12 rounded-xl flex flex-col items-center py-4 gap-3" style={{ background: color, opacity: 0.2 }}>
+        <div className="w-6 h-6 rounded-lg" style={{ background: color, opacity: 0.6 }} />
+        <div className="w-6 h-1 rounded" style={{ background: color, opacity: 0.4 }} />
+        <div className="w-6 h-1 rounded" style={{ background: color, opacity: 0.4 }} />
+        <div className="w-6 h-1 rounded" style={{ background: color, opacity: 0.4 }} />
+      </div>
 
-            {/* Connection lines */}
-            <line className="visual-line" x1="100" y1="100" x2="40" y2="40" stroke={color} strokeWidth="2" opacity="0.5" style={{ transformOrigin: "100px 100px" }} />
-            <line className="visual-line" x1="100" y1="100" x2="160" y2="40" stroke="#00D4FF" strokeWidth="2" opacity="0.5" style={{ transformOrigin: "100px 100px" }} />
-            <line className="visual-line" x1="100" y1="100" x2="40" y2="160" stroke="#7C3AED" strokeWidth="2" opacity="0.5" style={{ transformOrigin: "100px 100px" }} />
-            <line className="visual-line" x1="100" y1="100" x2="160" y2="160" stroke={color} strokeWidth="2" opacity="0.5" style={{ transformOrigin: "100px 100px" }} />
-            <line className="visual-line" x1="100" y1="100" x2="100" y2="25" stroke="#00D4FF" strokeWidth="2" opacity="0.5" style={{ transformOrigin: "100px 100px" }} />
-            <line className="visual-line" x1="100" y1="100" x2="100" y2="175" stroke={color} strokeWidth="2" opacity="0.5" style={{ transformOrigin: "100px 100px" }} />
-
-            {/* Outer nodes */}
-            <circle className="visual-dot" cx="40" cy="40" r="15" fill={color} opacity="0.4" />
-            <circle className="visual-dot" cx="40" cy="40" r="8" fill={color} />
-
-            <circle className="visual-dot" cx="160" cy="40" r="15" fill="#00D4FF" opacity="0.4" />
-            <circle className="visual-dot" cx="160" cy="40" r="8" fill="#00D4FF" />
-
-            <circle className="visual-dot" cx="40" cy="160" r="15" fill="#7C3AED" opacity="0.4" />
-            <circle className="visual-dot" cx="40" cy="160" r="8" fill="#7C3AED" />
-
-            <circle className="visual-dot" cx="160" cy="160" r="15" fill={color} opacity="0.4" />
-            <circle className="visual-dot" cx="160" cy="160" r="8" fill={color} />
-
-            <circle className="visual-dot" cx="100" cy="25" r="12" fill="#00D4FF" opacity="0.4" />
-            <circle className="visual-dot" cx="100" cy="25" r="6" fill="#00D4FF" />
-
-            <circle className="visual-dot" cx="100" cy="175" r="12" fill={color} opacity="0.4" />
-            <circle className="visual-dot" cx="100" cy="175" r="6" fill={color} />
-          </svg>
+      {/* Main content */}
+      <div className="flex-1 flex flex-col gap-3">
+        {/* Stat cards */}
+        <div className="flex gap-3">
+          {[0.8, 0.6, 0.7].map((opacity, i) => (
+            <div key={i} className="dash-card flex-1 h-16 rounded-xl p-3" style={{ background: color, opacity: opacity * 0.3 }}>
+              <div className="w-8 h-2 rounded mb-2" style={{ background: color, opacity: 0.5 }} />
+              <div className="w-12 h-4 rounded" style={{ background: color, opacity: 0.7 }} />
+            </div>
+          ))}
         </div>
-      );
 
-    default:
-      return null;
-  }
+        {/* Chart */}
+        <div className="flex-1 rounded-xl p-4" style={{ background: color, opacity: 0.1 }}>
+          <div className="w-16 h-2 rounded mb-4" style={{ background: color, opacity: 0.3 }} />
+          <div className="flex items-end justify-between h-24 gap-2">
+            {[60, 80, 45, 90, 70, 85, 55].map((height, i) => (
+              <div
+                key={i}
+                className="dash-bar flex-1 rounded-t origin-bottom"
+                style={{ height: `${height}%`, background: color, opacity: 0.6 }}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Table rows */}
+        <div className="rounded-xl p-3 space-y-2" style={{ background: color, opacity: 0.1 }}>
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="dash-table-row h-6 rounded flex gap-2">
+              <div className="w-6 h-full rounded" style={{ background: color, opacity: 0.3 }} />
+              <div className="flex-1 h-full rounded" style={{ background: color, opacity: 0.2 }} />
+              <div className="w-16 h-full rounded" style={{ background: color, opacity: 0.25 }} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Integration Nodes Animation
+function IntegrationAnimation({ color }: { color: string }) {
+  const nodes = [
+    { x: 50, y: 15, label: "API" },
+    { x: 85, y: 35, label: "CRM" },
+    { x: 85, y: 65, label: "ERP" },
+    { x: 50, y: 85, label: "DB" },
+    { x: 15, y: 65, label: "AI" },
+    { x: 15, y: 35, label: "Web" },
+  ];
+
+  return (
+    <svg viewBox="0 0 100 100" className="w-full h-full">
+      <defs>
+        <filter id="glow-int" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="2" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+
+      {/* Connection lines */}
+      {nodes.map((node, i) => (
+        <line
+          key={`line-${i}`}
+          className="int-line"
+          x1="50"
+          y1="50"
+          x2={node.x}
+          y2={node.y}
+          stroke={color}
+          strokeWidth="1"
+          strokeDasharray="100"
+          opacity="0.5"
+        />
+      ))}
+
+      {/* Center node pulse */}
+      <circle className="int-pulse" cx="50" cy="50" r="15" fill={color} opacity="0.3" />
+
+      {/* Center node */}
+      <g className="int-center">
+        <circle cx="50" cy="50" r="15" fill={color} opacity="0.3" filter="url(#glow-int)" />
+        <circle cx="50" cy="50" r="10" fill="#0A0A0A" stroke={color} strokeWidth="2" />
+        <circle cx="50" cy="50" r="4" fill={color} />
+        <text x="50" y="54" textAnchor="middle" fill="white" fontSize="6" fontWeight="bold">HUB</text>
+      </g>
+
+      {/* Outer nodes */}
+      {nodes.map((node, i) => (
+        <g key={`node-${i}`} className="int-node">
+          <circle cx={node.x} cy={node.y} r="10" fill={color} opacity="0.2" filter="url(#glow-int)" />
+          <circle cx={node.x} cy={node.y} r="7" fill="#0A0A0A" stroke={color} strokeWidth="1.5" />
+          <circle cx={node.x} cy={node.y} r="2" fill={color} />
+          <text x={node.x} y={node.y + 16} textAnchor="middle" fill="white" fontSize="5" opacity="0.7">
+            {node.label}
+          </text>
+        </g>
+      ))}
+    </svg>
+  );
 }
