@@ -11,30 +11,58 @@ if (typeof window !== "undefined") {
 }
 
 const techItems = [
-  { name: "Next.js", icon: "⚡", color: "#00D4FF" },
-  { name: "React", icon: "⚛️", color: "#61DAFB" },
-  { name: "TypeScript", icon: "📘", color: "#3178C6" },
-  { name: "Tailwind", icon: "🎨", color: "#38BDF8" },
-  { name: "GSAP", icon: "✨", color: "#88CE02" },
-  { name: "Three.js", icon: "🎮", color: "#00D4FF" },
-  { name: "Node.js", icon: "🟢", color: "#339933" },
-  { name: "NestJS", icon: "🦅", color: "#E0234E" },
-  { name: "PostgreSQL", icon: "🐘", color: "#336791" },
-  { name: "MongoDB", icon: "🍃", color: "#47A248" },
-  { name: "AWS", icon: "☁️", color: "#FF9900" },
-  { name: "Docker", icon: "🐳", color: "#2496ED" },
-  { name: "N8N", icon: "🔄", color: "#EA4B71" },
-  { name: "Vercel", icon: "▲", color: "#00D4FF" },
-  { name: "Redis", icon: "🔴", color: "#DC382D" },
-  { name: "GraphQL", icon: "◈", color: "#E10098" },
+  { name: "Next.js", icon: "/icons/tech/nextjs.png", color: "#000000" },
+  { name: "React", icon: "/icons/tech/react.png", color: "#61DAFB" },
+  { name: "TypeScript", icon: "/icons/tech/typescript.png", color: "#3178C6" },
+  { name: "Tailwind", icon: "/icons/tech/tailwind.png", color: "#38BDF8" },
+  { name: "GSAP", icon: "/icons/tech/gsap.png", color: "#88CE02" },
+  { name: "Three.js", icon: "/icons/tech/threejs.png", color: "#00D4FF" },
+  { name: "Node.js", icon: "/icons/tech/nodejs.png", color: "#339933" },
+  { name: "NestJS", icon: "/icons/tech/nestjs.png", color: "#E0234E" },
+  { name: "PostgreSQL", icon: "/icons/tech/postgresql.png", color: "#336791" },
+  { name: "MongoDB", icon: "/icons/tech/mongodb.png", color: "#47A248" },
+  { name: "AWS", icon: "/icons/tech/aws.png", color: "#FF9900" },
+  { name: "Docker", icon: "/icons/tech/docker.png", color: "#2496ED" },
+  { name: "N8N", icon: "/icons/tech/n8n.png", color: "#EA4B71" },
+  { name: "Vercel", icon: "/icons/tech/vercel.png", color: "#00D4FF" },
+  { name: "Redis", icon: "/icons/tech/redis.png", color: "#DC382D" },
+  { name: "GraphQL", icon: "/icons/tech/graphql.png", color: "#E10098" },
 ];
+
+// Preload images helper
+const preloadImages = (items: typeof techItems): Promise<Map<string, HTMLImageElement>> => {
+  return new Promise((resolve) => {
+    const imageMap = new Map<string, HTMLImageElement>();
+    let loadedCount = 0;
+
+    items.forEach((item) => {
+      const img = new Image();
+      img.onload = () => {
+        imageMap.set(item.name, img);
+        loadedCount++;
+        if (loadedCount === items.length) {
+          resolve(imageMap);
+        }
+      };
+      img.onerror = () => {
+        loadedCount++;
+        if (loadedCount === items.length) {
+          resolve(imageMap);
+        }
+      };
+      img.src = item.icon;
+    });
+  });
+};
 
 export function TechStack() {
   const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
   const engineRef = useRef<Matter.Engine | null>(null);
   const renderRef = useRef<Matter.Render | null>(null);
+  const imagesRef = useRef<Map<string, HTMLImageElement>>(new Map());
 
   // Intersection observer to trigger animation
   useEffect(() => {
@@ -54,9 +82,19 @@ export function TechStack() {
     return () => observer.disconnect();
   }, [isVisible]);
 
+  // Preload images when section becomes visible
+  useEffect(() => {
+    if (!isVisible || imagesLoaded) return;
+
+    preloadImages(techItems).then((imageMap) => {
+      imagesRef.current = imageMap;
+      setImagesLoaded(true);
+    });
+  }, [isVisible, imagesLoaded]);
+
   // Matter.js physics
   useEffect(() => {
-    if (!isVisible || !canvasRef.current) return;
+    if (!isVisible || !imagesLoaded || !canvasRef.current) return;
 
     const canvas = canvasRef.current;
     const container = canvas.parentElement;
@@ -229,7 +267,7 @@ export function TechStack() {
     const runner = Matter.Runner.create();
     Matter.Runner.run(runner, engine);
 
-    // Custom render for text labels - scale based on ball size
+    // Custom render for images - scale based on ball size
     Matter.Events.on(render, "afterRender", () => {
       const ctx = render.context;
       const allBodies = Matter.Composite.allBodies(engine.world);
@@ -237,27 +275,35 @@ export function TechStack() {
       allBodies.forEach((body) => {
         if (body.label && body.label !== "Rectangle Body" && body.label !== "Circle Body") {
           const item = techItems.find((t) => t.name === body.label);
+          const img = imagesRef.current.get(body.label);
+
           if (item) {
             // Get stored radius for scaling
             const radius = (body.plugin as any)?.radius || 50;
-            const scale = radius / 60; // Base scale factor
 
             ctx.save();
             ctx.translate(body.position.x, body.position.y);
             ctx.rotate(body.angle);
 
-            // Draw icon - scaled
-            const iconSize = Math.round(24 * scale);
-            ctx.font = `${iconSize}px Arial`;
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.fillText(item.icon, 0, -radius * 0.15);
+            // Draw the icon image if loaded
+            if (img) {
+              const imgSize = radius * 1.5; // Icon takes up most of the ball
+              ctx.drawImage(
+                img,
+                -imgSize / 2,
+                -imgSize / 2,
+                imgSize,
+                imgSize
+              );
+            }
 
-            // Draw name - scaled
-            const nameSize = Math.round(11 * scale);
+            // Draw name below the icon
+            const nameSize = Math.round(11 * (radius / 60));
             ctx.font = `bold ${nameSize}px system-ui`;
             ctx.fillStyle = "#FFFFFF";
-            ctx.fillText(item.name, 0, radius * 0.3);
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(item.name, 0, radius * 0.55);
 
             ctx.restore();
           }
@@ -273,7 +319,7 @@ export function TechStack() {
       Matter.Engine.clear(engine);
       render.canvas.remove();
     };
-  }, [isVisible]);
+  }, [isVisible, imagesLoaded]);
 
   // Handle resize
   useEffect(() => {
