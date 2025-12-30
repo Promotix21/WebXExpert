@@ -19,7 +19,7 @@ const services = [
 
 export function ServicesMarquee() {
   return (
-    <section className="py-8 md:py-12 border-y border-surface-300/50 bg-surface-050/50 overflow-hidden">
+    <section className="mt-16 md:mt-24 py-8 md:py-12 border-y border-surface-300/50 bg-surface-050/50 overflow-hidden">
       <TextMarquee
         items={services}
         speed={40}

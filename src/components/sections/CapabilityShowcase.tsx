@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
@@ -17,186 +17,192 @@ const capabilities = [
     title: "Real Estate CRM",
     subtitle: "Complete Property Management",
     description:
-      "End-to-end CRM with lead capture, EMI calculations, WhatsApp automation, and Facebook Ads integration. Watch how leads flow through your sales pipeline.",
+      "End-to-end CRM with lead capture, EMI calculations, WhatsApp automation, and Facebook Ads integration.",
     color: "pink",
     nodes: [
-      { id: "fb", label: "FB Ads", x: 5, y: 25 },
-      { id: "landing", label: "Landing Page", x: 20, y: 25 },
-      { id: "lead", label: "Lead Captured", x: 35, y: 25 },
-      { id: "auto", label: "Auto-Assign", x: 50, y: 15 },
-      { id: "emi", label: "EMI Calculator", x: 50, y: 35 },
-      { id: "wa", label: "WhatsApp", x: 65, y: 25 },
-      { id: "agent", label: "Agent", x: 80, y: 15 },
-      { id: "deal", label: "Deal Closed", x: 95, y: 25 },
+      { id: "fb", label: "FB Ads", x: 10, y: 20 },
+      { id: "landing", label: "Landing", x: 30, y: 20 },
+      { id: "lead", label: "Lead", x: 50, y: 20 },
+      { id: "wa", label: "WhatsApp", x: 70, y: 20 },
+      { id: "deal", label: "Deal", x: 90, y: 20 },
     ],
     connections: [
       { from: "fb", to: "landing" },
       { from: "landing", to: "lead" },
-      { from: "lead", to: "auto" },
-      { from: "lead", to: "emi" },
-      { from: "auto", to: "wa" },
-      { from: "emi", to: "wa" },
-      { from: "wa", to: "agent" },
+      { from: "lead", to: "wa" },
       { from: "wa", to: "deal" },
-      { from: "agent", to: "deal" },
     ],
-    stats: ["10K+ Leads Processed", "85% Conversion Rate", "24/7 Automation"],
+    stats: ["10K+ Leads", "85% Conversion", "24/7"],
   },
   {
     id: "marketing-crm",
     title: "Marketing CRM",
     subtitle: "Multi-Channel Campaign Hub",
     description:
-      "Unified platform for lead management, campaign automation, analytics, and team collaboration. All channels converge into one powerful dashboard.",
+      "Unified platform for lead management, campaign automation, analytics, and team collaboration.",
     color: "cyan",
     nodes: [
-      { id: "web", label: "Website", x: 5, y: 15 },
-      { id: "social", label: "Social", x: 5, y: 35 },
-      { id: "email", label: "Email", x: 5, y: 55 },
-      { id: "hub", label: "Central Hub", x: 30, y: 35 },
-      { id: "segment", label: "Segmentation", x: 50, y: 20 },
-      { id: "campaign", label: "Campaign", x: 50, y: 50 },
-      { id: "analytics", label: "Analytics", x: 70, y: 35 },
-      { id: "roi", label: "ROI Report", x: 90, y: 35 },
+      { id: "web", label: "Website", x: 10, y: 15 },
+      { id: "social", label: "Social", x: 10, y: 35 },
+      { id: "hub", label: "Hub", x: 40, y: 25 },
+      { id: "analytics", label: "Analytics", x: 70, y: 25 },
+      { id: "roi", label: "ROI", x: 90, y: 25 },
     ],
     connections: [
       { from: "web", to: "hub" },
       { from: "social", to: "hub" },
-      { from: "email", to: "hub" },
-      { from: "hub", to: "segment" },
-      { from: "hub", to: "campaign" },
-      { from: "segment", to: "analytics" },
-      { from: "campaign", to: "analytics" },
+      { from: "hub", to: "analytics" },
       { from: "analytics", to: "roi" },
     ],
-    stats: ["50+ Integrations", "Real-time Analytics", "AI-Powered"],
+    stats: ["50+ Integrations", "Real-time", "AI-Powered"],
   },
   {
     id: "seo-software",
     title: "SEO Automation",
     subtitle: "Autonomous Optimization Engine",
     description:
-      "Automated crawling, analysis, optimization execution, and performance tracking. Watch your rankings climb with intelligent automation.",
+      "Automated crawling, analysis, optimization execution, and performance tracking.",
     color: "purple",
     nodes: [
-      { id: "crawl", label: "Crawler", x: 5, y: 30 },
-      { id: "data", label: "Data Extract", x: 20, y: 30 },
-      { id: "ai", label: "AI Analysis", x: 38, y: 15 },
-      { id: "audit", label: "Site Audit", x: 38, y: 45 },
-      { id: "optimize", label: "Auto-Optimize", x: 58, y: 30 },
-      { id: "report", label: "Reports", x: 78, y: 15 },
-      { id: "rank", label: "Rank Track", x: 78, y: 45 },
-      { id: "growth", label: "Growth", x: 95, y: 30 },
+      { id: "crawl", label: "Crawl", x: 10, y: 25 },
+      { id: "analyze", label: "Analyze", x: 35, y: 25 },
+      { id: "optimize", label: "Optimize", x: 60, y: 25 },
+      { id: "track", label: "Track", x: 85, y: 25 },
     ],
     connections: [
-      { from: "crawl", to: "data" },
-      { from: "data", to: "ai" },
-      { from: "data", to: "audit" },
-      { from: "ai", to: "optimize" },
-      { from: "audit", to: "optimize" },
-      { from: "optimize", to: "report" },
-      { from: "optimize", to: "rank" },
-      { from: "report", to: "growth" },
-      { from: "rank", to: "growth" },
+      { from: "crawl", to: "analyze" },
+      { from: "analyze", to: "optimize" },
+      { from: "optimize", to: "track" },
     ],
-    stats: ["500+ Sites Optimized", "3x Traffic Growth", "Auto-Updates"],
+    stats: ["500+ Sites", "3x Growth", "Auto-Updates"],
   },
   {
     id: "chatbot",
     title: "AI Chatbots",
     subtitle: "Multi-Platform Conversations",
     description:
-      "Intelligent chatbots across WhatsApp, Instagram, and Messenger. See how conversations flow from first message to conversion.",
+      "Intelligent chatbots across WhatsApp, Instagram, and Messenger with AI-powered responses.",
     color: "cyan",
     nodes: [
-      { id: "whatsapp", label: "WhatsApp", x: 5, y: 15 },
-      { id: "insta", label: "Instagram", x: 5, y: 35 },
-      { id: "messenger", label: "Messenger", x: 5, y: 55 },
-      { id: "router", label: "AI Router", x: 28, y: 35 },
-      { id: "intent", label: "Intent", x: 48, y: 20 },
-      { id: "response", label: "Response", x: 48, y: 50 },
-      { id: "human", label: "Human", x: 68, y: 35 },
-      { id: "resolved", label: "Resolved", x: 90, y: 35 },
+      { id: "wa", label: "WhatsApp", x: 10, y: 15 },
+      { id: "ig", label: "Instagram", x: 10, y: 35 },
+      { id: "ai", label: "AI", x: 50, y: 25 },
+      { id: "resolved", label: "Resolved", x: 90, y: 25 },
     ],
     connections: [
-      { from: "whatsapp", to: "router" },
-      { from: "insta", to: "router" },
-      { from: "messenger", to: "router" },
-      { from: "router", to: "intent" },
-      { from: "router", to: "response" },
-      { from: "intent", to: "response" },
-      { from: "response", to: "human" },
-      { from: "response", to: "resolved" },
-      { from: "human", to: "resolved" },
+      { from: "wa", to: "ai" },
+      { from: "ig", to: "ai" },
+      { from: "ai", to: "resolved" },
     ],
-    stats: ["1M+ Messages", "95% Auto-Resolved", "24/7 Available"],
+    stats: ["1M+ Messages", "95% Auto", "24/7"],
   },
   {
     id: "ecommerce",
     title: "E-commerce",
     subtitle: "Custom Shopping Experiences",
     description:
-      "Complete e-commerce with inventory sync, payment gateways, and automated fulfillment. Track the customer journey from browse to buy.",
+      "Complete e-commerce with inventory sync, payment gateways, and automated fulfillment.",
     color: "pink",
     nodes: [
-      { id: "browse", label: "Browse", x: 5, y: 30 },
-      { id: "cart", label: "Cart", x: 20, y: 30 },
-      { id: "checkout", label: "Checkout", x: 38, y: 30 },
-      { id: "payment", label: "Payment", x: 55, y: 15 },
-      { id: "inventory", label: "Inventory", x: 55, y: 45 },
-      { id: "ship", label: "Shipping", x: 72, y: 30 },
-      { id: "notify", label: "Notify", x: 88, y: 15 },
-      { id: "deliver", label: "Delivered", x: 88, y: 45 },
+      { id: "browse", label: "Browse", x: 10, y: 25 },
+      { id: "cart", label: "Cart", x: 35, y: 25 },
+      { id: "pay", label: "Pay", x: 60, y: 25 },
+      { id: "ship", label: "Ship", x: 85, y: 25 },
     ],
     connections: [
       { from: "browse", to: "cart" },
-      { from: "cart", to: "checkout" },
-      { from: "checkout", to: "payment" },
-      { from: "checkout", to: "inventory" },
-      { from: "payment", to: "ship" },
-      { from: "inventory", to: "ship" },
-      { from: "ship", to: "notify" },
-      { from: "ship", to: "deliver" },
+      { from: "cart", to: "pay" },
+      { from: "pay", to: "ship" },
     ],
-    stats: ["$2M+ Processed", "99.9% Uptime", "Global Shipping"],
+    stats: ["$2M+ Processed", "99.9% Uptime", "Global"],
   },
   {
     id: "devtools",
     title: "Developer Tools",
     subtitle: "Modern Development Stack",
     description:
-      "N8N workflows, AWS infrastructure, AI integrations. See how we orchestrate complex automations with cutting-edge tools.",
+      "N8N workflows, AWS infrastructure, AI integrations with cutting-edge automation.",
     color: "purple",
     nodes: [
-      { id: "input", label: "Input", x: 5, y: 30 },
-      { id: "n8n", label: "N8N", x: 22, y: 30 },
-      { id: "ai", label: "AI Process", x: 40, y: 15 },
-      { id: "api", label: "API Layer", x: 40, y: 45 },
-      { id: "aws", label: "AWS", x: 58, y: 30 },
-      { id: "output", label: "Output", x: 76, y: 15 },
-      { id: "monitor", label: "Monitor", x: 76, y: 45 },
-      { id: "scale", label: "Scale", x: 92, y: 30 },
+      { id: "input", label: "Input", x: 10, y: 25 },
+      { id: "n8n", label: "N8N", x: 35, y: 25 },
+      { id: "aws", label: "AWS", x: 60, y: 25 },
+      { id: "scale", label: "Scale", x: 85, y: 25 },
     ],
     connections: [
       { from: "input", to: "n8n" },
-      { from: "n8n", to: "ai" },
-      { from: "n8n", to: "api" },
-      { from: "ai", to: "aws" },
-      { from: "api", to: "aws" },
-      { from: "aws", to: "output" },
-      { from: "aws", to: "monitor" },
-      { from: "output", to: "scale" },
-      { from: "monitor", to: "scale" },
+      { from: "n8n", to: "aws" },
+      { from: "aws", to: "scale" },
     ],
-    stats: ["100+ Workflows", "Auto-Scaling", "99.99% SLA"],
+    stats: ["100+ Workflows", "Auto-Scale", "99.99% SLA"],
   },
 ];
 
 export function CapabilityShowcase() {
-  const [activeIndex, setActiveIndex] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const progressRef = useRef<HTMLDivElement>(null);
 
-  const activeCapability = capabilities[activeIndex];
+  useEffect(() => {
+    const section = sectionRef.current;
+    const track = trackRef.current;
+    const progress = progressRef.current;
+
+    if (!section || !track || !progress) return;
+
+    const ctx = gsap.context(() => {
+      const getScrollWidth = () => track.scrollWidth - window.innerWidth;
+
+      // Horizontal scroll animation
+      const scrollTween = gsap.to(track, {
+        x: () => -getScrollWidth(),
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top top",
+          end: () => `+=${getScrollWidth()}`,
+          pin: true,
+          scrub: 1,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      // Progress bar animation
+      gsap.to(progress, {
+        width: "100%",
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top top",
+          end: () => `+=${getScrollWidth()}`,
+          scrub: 1,
+        },
+      });
+
+      // Animate each card
+      const cards = track.querySelectorAll(".capability-card");
+      cards.forEach((card) => {
+        gsap.fromTo(
+          card,
+          { opacity: 0.5, scale: 0.95 },
+          {
+            opacity: 1,
+            scale: 1,
+            scrollTrigger: {
+              trigger: card,
+              containerAnimation: scrollTween,
+              start: "left 80%",
+              end: "left 30%",
+              scrub: true,
+            },
+          }
+        );
+      });
+    }, section);
+
+    return () => ctx.revert();
+  }, []);
 
   const getColorClasses = (color: string) => {
     switch (color) {
@@ -205,146 +211,145 @@ export function CapabilityShowcase() {
           accent: "#FF0080",
           glow: "rgba(255, 0, 128, 0.5)",
           bg: "bg-brand-pink-500",
+          bgLight: "bg-brand-pink-500/10",
           text: "text-brand-pink-500",
-          border: "border-brand-pink-500",
+          border: "border-brand-pink-500/30",
+          shadow: "shadow-[0_0_60px_rgba(255,0,128,0.2)]",
         };
       case "cyan":
         return {
           accent: "#00D4FF",
           glow: "rgba(0, 212, 255, 0.5)",
           bg: "bg-brand-cyan-500",
+          bgLight: "bg-brand-cyan-500/10",
           text: "text-brand-cyan-500",
-          border: "border-brand-cyan-500",
+          border: "border-brand-cyan-500/30",
+          shadow: "shadow-[0_0_60px_rgba(0,212,255,0.2)]",
         };
       case "purple":
         return {
           accent: "#7C3AED",
           glow: "rgba(124, 58, 237, 0.5)",
           bg: "bg-brand-purple-500",
+          bgLight: "bg-brand-purple-500/10",
           text: "text-brand-purple-500",
-          border: "border-brand-purple-500",
+          border: "border-brand-purple-500/30",
+          shadow: "shadow-[0_0_60px_rgba(124,58,237,0.2)]",
         };
       default:
         return {
           accent: "#FF0080",
           glow: "rgba(255, 0, 128, 0.5)",
           bg: "bg-brand-pink-500",
+          bgLight: "bg-brand-pink-500/10",
           text: "text-brand-pink-500",
-          border: "border-brand-pink-500",
+          border: "border-brand-pink-500/30",
+          shadow: "shadow-[0_0_60px_rgba(255,0,128,0.2)]",
         };
     }
   };
 
   return (
-    <section
-      ref={sectionRef}
-      id="work"
-      className="py-20 md:py-32 bg-black relative overflow-hidden"
-    >
+    <section ref={sectionRef} id="work" className="relative bg-black overflow-hidden">
       {/* Background effects */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,0,128,0.05)_0%,transparent_70%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,0,128,0.03)_0%,transparent_70%)]" />
 
-      <div className="container-main relative z-10">
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
-          <span className="text-sm text-brand-pink-500 font-medium tracking-widest uppercase mb-4 block">
-            What We Build
-          </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
-            Intelligent <span className="gradient-text">Systems</span> That Power Business
-          </h2>
-          <p className="text-neutral-400 text-lg">
-            We don&apos;t just build websites. We architect complete digital ecosystems
-            with intelligent automation and seamless integrations.
-          </p>
-        </div>
-
-        {/* Capability Selector */}
-        <div className="mb-8 md:mb-12 -mx-4 px-4 overflow-x-auto scrollbar-hide">
-          <div className="flex gap-2 md:gap-3 justify-start lg:justify-center min-w-max lg:min-w-0 pb-2">
-            {capabilities.map((cap, index) => {
-              const colors = getColorClasses(cap.color);
-              const isActive = activeIndex === index;
-
-              return (
-                <button
-                  key={cap.id}
-                  onClick={() => setActiveIndex(index)}
-                  className={cn(
-                    "px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-300 whitespace-nowrap",
-                    isActive
-                      ? `${colors.bg} text-white shadow-lg`
-                      : "bg-surface-200/50 text-neutral-400 hover:text-white hover:bg-surface-200"
-                  )}
-                  style={{
-                    boxShadow: isActive ? `0 0 20px ${colors.glow}` : "none",
-                  }}
-                >
-                  {cap.title}
-                </button>
-              );
-            })}
+      {/* Section Header - Fixed at top */}
+      <div className="absolute top-0 left-0 right-0 z-20 pt-8 md:pt-12">
+        <div className="container-main">
+          <div className="flex items-center justify-between">
+            <div>
+              <span className="text-sm text-brand-pink-500 font-medium tracking-widest uppercase mb-2 block">
+                What We Build
+              </span>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold">
+                Intelligent <span className="gradient-text">Systems</span>
+              </h2>
+            </div>
+            <div className="hidden md:block text-right">
+              <span className="text-sm text-neutral-500">Scroll to explore</span>
+              <div className="flex items-center gap-2 justify-end mt-2">
+                <span className="text-xs text-neutral-600">01</span>
+                <div className="w-24 h-1 bg-surface-300 rounded-full overflow-hidden">
+                  <div
+                    ref={progressRef}
+                    className="h-full w-0 bg-gradient-to-r from-brand-pink-500 via-brand-purple-500 to-brand-cyan-500 rounded-full"
+                  />
+                </div>
+                <span className="text-xs text-neutral-600">06</span>
+              </div>
+            </div>
           </div>
         </div>
+      </div>
 
-        {/* Active Capability Display */}
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-          {/* Info Panel */}
-          <div className="order-2 lg:order-1 space-y-6">
-            <div>
-              <span
+      {/* Horizontal Track */}
+      <div ref={trackRef} className="flex items-center min-h-screen pt-32 pb-20">
+        {/* Initial spacer */}
+        <div className="shrink-0 w-[5vw]" />
+
+        {/* Cards */}
+        {capabilities.map((capability, index) => {
+          const colors = getColorClasses(capability.color);
+
+          return (
+            <div
+              key={capability.id}
+              className="capability-card shrink-0 w-[85vw] md:w-[70vw] lg:w-[50vw] px-4 md:px-6"
+            >
+              <div
                 className={cn(
-                  "text-sm font-medium tracking-wider uppercase",
-                  getColorClasses(activeCapability.color).text
+                  "h-full p-6 md:p-8 lg:p-10 rounded-3xl border backdrop-blur-sm",
+                  colors.bgLight,
+                  colors.border,
+                  colors.shadow
                 )}
               >
-                {activeCapability.subtitle}
-              </span>
-              <h3 className="text-3xl md:text-4xl font-bold mt-2">
-                {activeCapability.title}
-              </h3>
-            </div>
-
-            <p className="text-neutral-400 leading-relaxed">
-              {activeCapability.description}
-            </p>
-
-            {/* Stats */}
-            <div className="flex flex-wrap gap-4">
-              {activeCapability.stats.map((stat, i) => (
-                <div
-                  key={i}
-                  className="px-4 py-2 rounded-lg bg-surface-100 border border-surface-300/50"
-                >
-                  <span className="text-sm font-medium text-white">{stat}</span>
+                {/* Card header */}
+                <div className="flex items-start justify-between mb-6">
+                  <div>
+                    <span className={cn("text-xs font-medium tracking-wider uppercase", colors.text)}>
+                      {capability.subtitle}
+                    </span>
+                    <h3 className="text-2xl md:text-3xl font-bold mt-1">{capability.title}</h3>
+                  </div>
+                  <span className={cn("text-5xl md:text-6xl font-bold opacity-20", colors.text)}>
+                    0{index + 1}
+                  </span>
                 </div>
-              ))}
+
+                {/* Flow Diagram */}
+                <div className="mb-6">
+                  <FlowDiagram capability={capability} colors={colors} />
+                </div>
+
+                {/* Description */}
+                <p className="text-neutral-400 text-sm md:text-base mb-6 leading-relaxed">
+                  {capability.description}
+                </p>
+
+                {/* Stats */}
+                <div className="flex flex-wrap gap-2">
+                  {capability.stats.map((stat, i) => (
+                    <span
+                      key={i}
+                      className={cn(
+                        "px-3 py-1.5 rounded-full text-xs font-medium",
+                        colors.bgLight,
+                        colors.text
+                      )}
+                    >
+                      {stat}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
+          );
+        })}
 
-            {/* CTA */}
-            <button
-              className={cn(
-                "px-6 py-3 rounded-full font-semibold transition-all duration-300",
-                getColorClasses(activeCapability.color).bg,
-                "text-white hover:scale-105"
-              )}
-              style={{
-                boxShadow: `0 0 30px ${getColorClasses(activeCapability.color).glow}`,
-              }}
-            >
-              Learn More
-            </button>
-          </div>
-
-          {/* Animated Flow Diagram */}
-          <div className="order-1 lg:order-2">
-            <FlowDiagram
-              key={activeIndex}
-              capability={activeCapability}
-              colors={getColorClasses(activeCapability.color)}
-            />
-          </div>
-        </div>
+        {/* End spacer */}
+        <div className="shrink-0 w-[20vw]" />
       </div>
     </section>
   );
@@ -361,7 +366,6 @@ function FlowDiagram({
   colors: ReturnType<typeof getColorClasses>;
 }) {
   const svgRef = useRef<SVGSVGElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   function getColorClasses(color: string) {
     switch (color) {
@@ -370,32 +374,40 @@ function FlowDiagram({
           accent: "#FF0080",
           glow: "rgba(255, 0, 128, 0.5)",
           bg: "bg-brand-pink-500",
+          bgLight: "bg-brand-pink-500/10",
           text: "text-brand-pink-500",
-          border: "border-brand-pink-500",
+          border: "border-brand-pink-500/30",
+          shadow: "shadow-[0_0_60px_rgba(255,0,128,0.2)]",
         };
       case "cyan":
         return {
           accent: "#00D4FF",
           glow: "rgba(0, 212, 255, 0.5)",
           bg: "bg-brand-cyan-500",
+          bgLight: "bg-brand-cyan-500/10",
           text: "text-brand-cyan-500",
-          border: "border-brand-cyan-500",
+          border: "border-brand-cyan-500/30",
+          shadow: "shadow-[0_0_60px_rgba(0,212,255,0.2)]",
         };
       case "purple":
         return {
           accent: "#7C3AED",
           glow: "rgba(124, 58, 237, 0.5)",
           bg: "bg-brand-purple-500",
+          bgLight: "bg-brand-purple-500/10",
           text: "text-brand-purple-500",
-          border: "border-brand-purple-500",
+          border: "border-brand-purple-500/30",
+          shadow: "shadow-[0_0_60px_rgba(124,58,237,0.2)]",
         };
       default:
         return {
           accent: "#FF0080",
           glow: "rgba(255, 0, 128, 0.5)",
           bg: "bg-brand-pink-500",
+          bgLight: "bg-brand-pink-500/10",
           text: "text-brand-pink-500",
-          border: "border-brand-pink-500",
+          border: "border-brand-pink-500/30",
+          shadow: "shadow-[0_0_60px_rgba(255,0,128,0.2)]",
         };
     }
   }
@@ -414,7 +426,7 @@ function FlowDiagram({
           scale: 1,
           opacity: 1,
           duration: 0.5,
-          stagger: 0.08,
+          stagger: 0.1,
           ease: "back.out(1.7)",
         }
       );
@@ -430,12 +442,12 @@ function FlowDiagram({
             strokeDashoffset: 0,
             duration: 0.8,
             ease: "power2.out",
-            delay: 0.4,
+            delay: 0.3,
           }
         );
       });
 
-      // Animate data particles flowing
+      // Continuous particle animation
       const particles = svg.querySelectorAll(".data-particle");
       particles.forEach((particle, i) => {
         const pathId = particle.getAttribute("data-path");
@@ -448,19 +460,10 @@ function FlowDiagram({
               align: path,
               alignOrigin: [0.5, 0.5],
             },
-            duration: 2 + Math.random(),
+            duration: 1.5 + Math.random() * 0.5,
             repeat: -1,
-            delay: 1 + i * 0.3,
+            delay: i * 0.3,
             ease: "none",
-          });
-
-          // Pulse opacity
-          gsap.to(particle, {
-            opacity: 0.3,
-            duration: 0.5,
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut",
           });
         }
       });
@@ -472,7 +475,7 @@ function FlowDiagram({
         duration: 1.5,
         repeat: -1,
         yoyo: true,
-        stagger: 0.2,
+        stagger: 0.15,
         ease: "sine.inOut",
       });
     }, svg);
@@ -483,99 +486,75 @@ function FlowDiagram({
   const getNodeById = (id: string) => capability.nodes.find((n) => n.id === id);
 
   return (
-    <div
-      ref={containerRef}
-      className="relative aspect-[4/3] w-full bg-surface-100/50 rounded-3xl border border-surface-300/30 overflow-hidden backdrop-blur-sm"
-    >
+    <div className="relative aspect-[3/1] w-full bg-black/30 rounded-2xl overflow-hidden">
       {/* Grid background */}
-      <div
-        className="absolute inset-0 opacity-20"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)
-          `,
-          backgroundSize: "30px 30px",
-        }}
-      />
-
-      {/* Radial glow */}
       <div
         className="absolute inset-0 opacity-30"
         style={{
-          background: `radial-gradient(ellipse at center, ${colors.glow} 0%, transparent 60%)`,
+          backgroundImage: `
+            linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)
+          `,
+          backgroundSize: "20px 20px",
         }}
       />
 
       <svg
         ref={svgRef}
-        viewBox="0 0 100 70"
+        viewBox="0 0 100 50"
         className="w-full h-full"
         preserveAspectRatio="xMidYMid meet"
       >
         <defs>
-          {/* Glow filter */}
-          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="1.5" result="blur" />
+          <filter id={`glow-${capability.id}`} x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="1" result="blur" />
             <feMerge>
               <feMergeNode in="blur" />
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
-
-          {/* Gradient for lines */}
-          <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor={colors.accent} stopOpacity="0.2" />
-            <stop offset="50%" stopColor={colors.accent} stopOpacity="0.8" />
-            <stop offset="100%" stopColor={colors.accent} stopOpacity="0.2" />
-          </linearGradient>
         </defs>
 
         {/* Connection lines */}
-        {capability.connections.map((conn, i) => {
+        {capability.connections.map((conn) => {
           const fromNode = getNodeById(conn.from);
           const toNode = getNodeById(conn.to);
           if (!fromNode || !toNode) return null;
 
-          const pathId = `path-${conn.from}-${conn.to}`;
-          const midX = (fromNode.x + toNode.x) / 2;
-          const midY = (fromNode.y + toNode.y) / 2;
-          const controlOffset = Math.abs(toNode.y - fromNode.y) > 10 ? 5 : 0;
+          const pathId = `path-${capability.id}-${conn.from}-${conn.to}`;
 
           return (
             <g key={pathId}>
-              {/* Background line */}
               <path
-                d={`M ${fromNode.x} ${fromNode.y} Q ${midX} ${midY + controlOffset} ${toNode.x} ${toNode.y}`}
-                stroke="rgba(255,255,255,0.05)"
+                d={`M ${fromNode.x} ${fromNode.y} L ${toNode.x} ${toNode.y}`}
+                stroke="rgba(255,255,255,0.1)"
                 strokeWidth="0.5"
                 fill="none"
               />
-              {/* Animated line */}
               <path
                 id={pathId}
                 className="flow-line"
-                d={`M ${fromNode.x} ${fromNode.y} Q ${midX} ${midY + controlOffset} ${toNode.x} ${toNode.y}`}
+                d={`M ${fromNode.x} ${fromNode.y} L ${toNode.x} ${toNode.y}`}
                 stroke={colors.accent}
-                strokeWidth="0.4"
+                strokeWidth="0.8"
                 fill="none"
-                opacity="0.6"
+                opacity="0.7"
               />
             </g>
           );
         })}
 
         {/* Data particles */}
-        {capability.connections.slice(0, 5).map((conn, i) => {
-          const pathId = `path-${conn.from}-${conn.to}`;
+        {capability.connections.map((conn, i) => {
+          const pathId = `path-${capability.id}-${conn.from}-${conn.to}`;
           return (
             <circle
-              key={`particle-${i}`}
+              key={`particle-${capability.id}-${i}`}
               className="data-particle"
-              r="1"
+              r="1.5"
               fill={colors.accent}
               data-path={pathId}
-              filter="url(#glow)"
+              filter={`url(#glow-${capability.id})`}
             />
           );
         })}
@@ -583,33 +562,24 @@ function FlowDiagram({
         {/* Nodes */}
         {capability.nodes.map((node) => (
           <g
-            key={node.id}
+            key={`${capability.id}-${node.id}`}
             className="flow-node"
             transform={`translate(${node.x}, ${node.y})`}
           >
-            {/* Glow circle */}
             <circle
               className="node-glow"
-              r="5"
+              r="6"
               fill={colors.accent}
-              opacity="0.2"
-              filter="url(#glow)"
+              opacity="0.3"
+              filter={`url(#glow-${capability.id})`}
             />
-            {/* Main circle */}
-            <circle
-              r="3"
-              fill="#0A0A0A"
-              stroke={colors.accent}
-              strokeWidth="0.5"
-            />
-            {/* Inner dot */}
-            <circle r="1.2" fill={colors.accent} />
-            {/* Label */}
+            <circle r="4" fill="#0A0A0A" stroke={colors.accent} strokeWidth="1" />
+            <circle r="1.5" fill={colors.accent} />
             <text
-              y="7"
+              y="12"
               textAnchor="middle"
               fill="white"
-              fontSize="2.5"
+              fontSize="3.5"
               fontWeight="500"
               className="select-none"
             >
@@ -618,27 +588,6 @@ function FlowDiagram({
           </g>
         ))}
       </svg>
-
-      {/* Corner accents */}
-      <div
-        className="absolute top-4 left-4 w-10 h-10 border-l-2 border-t-2 rounded-tl-lg opacity-50"
-        style={{ borderColor: colors.accent }}
-      />
-      <div
-        className="absolute bottom-4 right-4 w-10 h-10 border-r-2 border-b-2 rounded-br-lg opacity-50"
-        style={{ borderColor: colors.accent }}
-      />
-
-      {/* Live indicator */}
-      <div className="absolute top-4 right-4 flex items-center gap-2">
-        <span
-          className="w-2 h-2 rounded-full animate-pulse"
-          style={{ backgroundColor: colors.accent }}
-        />
-        <span className="text-xs text-neutral-500 uppercase tracking-wider">
-          Live Flow
-        </span>
-      </div>
     </div>
   );
 }
