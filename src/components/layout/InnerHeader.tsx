@@ -19,6 +19,7 @@ export function InnerHeader() {
   const headerRef = useRef<HTMLElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const menuItemsRef = useRef<(HTMLAnchorElement | null)[]>([]);
+  const ctaRef = useRef<HTMLAnchorElement>(null);
   const pathname = usePathname();
 
   // Animate header on mount
@@ -32,9 +33,56 @@ export function InnerHeader() {
         { y: -100, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.8, ease: "power3.out", delay: 0.1 }
       );
+
+      // CTA button glow pulse
+      if (ctaRef.current) {
+        gsap.to(ctaRef.current, {
+          boxShadow: "0 0 30px rgba(0, 212, 255, 0.5)",
+          duration: 1.5,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+        });
+      }
     });
 
     return () => ctx.revert();
+  }, []);
+
+  // Magnetic effect for CTA button
+  useEffect(() => {
+    const btn = ctaRef.current;
+    if (!btn) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = btn.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+
+      gsap.to(btn, {
+        x: x * 0.3,
+        y: y * 0.3,
+        duration: 0.3,
+        ease: "power2.out",
+      });
+    };
+
+    const handleMouseLeave = () => {
+      gsap.to(btn, {
+        x: 0,
+        y: 0,
+        duration: 0.5,
+        ease: "elastic.out(1, 0.3)",
+      });
+    };
+
+    btn.addEventListener("mousemove", handleMouseMove);
+    btn.addEventListener("mouseleave", handleMouseLeave);
+
+    return () => {
+      btn.removeEventListener("mousemove", handleMouseMove);
+      btn.removeEventListener("mouseleave", handleMouseLeave);
+    };
   }, []);
 
   // Animate mobile menu
@@ -143,8 +191,9 @@ export function InnerHeader() {
             {/* Desktop CTA */}
             <div className="hidden lg:block">
               <Link
+                ref={ctaRef}
                 href="/contact"
-                className="relative px-6 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-brand-cyan-500 to-brand-cyan-600 rounded-full overflow-hidden group"
+                className="relative inline-block px-6 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-brand-cyan-500 to-brand-cyan-600 rounded-full overflow-hidden group"
               >
                 <span className="relative z-10">Start Project</span>
                 <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
