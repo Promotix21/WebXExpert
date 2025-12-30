@@ -12,17 +12,17 @@ if (typeof window !== "undefined") {
 
 const footerLinks = {
   services: [
-    { label: "Web Design", href: "#services" },
-    { label: "Web Development", href: "#services" },
-    { label: "Custom Software", href: "#services" },
-    { label: "CRM Development", href: "#work" },
-    { label: "API Integrations", href: "#services" },
+    { label: "Web Design", href: "/services#web-design" },
+    { label: "Web Development", href: "/services#web-development" },
+    { label: "Custom Software", href: "/services#custom-software" },
+    { label: "CRM Development", href: "/work" },
+    { label: "API Integrations", href: "/services#integrations" },
   ],
   company: [
-    { label: "About Us", href: "#about" },
-    { label: "Our Work", href: "#work" },
-    { label: "Process", href: "#process" },
-    { label: "Contact", href: "#contact" },
+    { label: "About Us", href: "/about" },
+    { label: "Our Work", href: "/work" },
+    { label: "Services", href: "/services" },
+    { label: "Contact", href: "/contact" },
   ],
   connect: [
     { label: "Twitter/X", href: "https://twitter.com", icon: "𝕏" },
@@ -78,17 +78,14 @@ export function Footer() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8">
             {/* Brand Column */}
             <div className="lg:col-span-5 footer-animate">
-              <Link href="/" className="inline-flex items-center gap-3 mb-6 group">
+              <Link href="/" className="inline-block mb-6 group">
                 <Image
                   src="/webxexpert-logo-light.png"
                   alt="WebXExpert"
-                  width={48}
-                  height={48}
-                  className="w-12 h-12 transition-transform duration-300 group-hover:scale-110"
+                  width={200}
+                  height={50}
+                  className="h-12 w-auto transition-transform duration-300 group-hover:scale-105"
                 />
-                <span className="text-2xl font-bold tracking-tight">
-                  Web<span className="text-brand-cyan-500">X</span>Expert
-                </span>
               </Link>
 
               <p className="text-neutral-400 max-w-md mb-8 leading-relaxed">
@@ -97,8 +94,8 @@ export function Footer() {
               </p>
 
               {/* CTA Button */}
-              <a
-                href="#contact"
+              <Link
+                href="/contact"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-brand-cyan-500 text-black font-semibold rounded-full hover:bg-brand-cyan-400 transition-all duration-300 hover:shadow-[0_0_30px_rgba(0,212,255,0.4)] group"
               >
                 Start Your Project
@@ -115,7 +112,7 @@ export function Footer() {
                     d="M17 8l4 4m0 0l-4 4m4-4H3"
                   />
                 </svg>
-              </a>
+              </Link>
             </div>
 
             {/* Links Columns */}
@@ -129,13 +126,13 @@ export function Footer() {
                   <ul className="space-y-4">
                     {footerLinks.services.map((link) => (
                       <li key={link.label}>
-                        <a
+                        <Link
                           href={link.href}
                           className="text-neutral-400 hover:text-white transition-colors duration-200 flex items-center gap-2 group"
                         >
                           <span className="w-1 h-1 rounded-full bg-brand-cyan-500/50 group-hover:bg-brand-cyan-500 transition-colors" />
                           {link.label}
-                        </a>
+                        </Link>
                       </li>
                     ))}
                   </ul>
@@ -149,13 +146,13 @@ export function Footer() {
                   <ul className="space-y-4">
                     {footerLinks.company.map((link) => (
                       <li key={link.label}>
-                        <a
+                        <Link
                           href={link.href}
                           className="text-neutral-400 hover:text-white transition-colors duration-200 flex items-center gap-2 group"
                         >
                           <span className="w-1 h-1 rounded-full bg-brand-cyan-500/50 group-hover:bg-brand-cyan-500 transition-colors" />
                           {link.label}
-                        </a>
+                        </Link>
                       </li>
                     ))}
                   </ul>
@@ -204,12 +201,12 @@ export function Footer() {
             </p>
 
             <div className="flex items-center gap-6 text-sm text-neutral-600">
-              <a href="#" className="hover:text-brand-cyan-500 transition-colors">
+              <Link href="/privacy" className="hover:text-brand-cyan-500 transition-colors">
                 Privacy Policy
-              </a>
-              <a href="#" className="hover:text-brand-cyan-500 transition-colors">
+              </Link>
+              <Link href="/terms" className="hover:text-brand-cyan-500 transition-colors">
                 Terms of Service
-              </a>
+              </Link>
             </div>
           </div>
         </div>
