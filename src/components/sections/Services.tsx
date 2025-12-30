@@ -4,6 +4,7 @@ import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -18,6 +19,7 @@ const services = [
       "Award-worthy designs with GSAP animations, WebGL experiences, and interactions that captivate. Every pixel crafted with purpose.",
     features: ["Motion Design & GSAP", "WebGL & Three.js", "Responsive & Mobile-First", "Conversion-Focused UX"],
     color: "cyan",
+    href: "/services/web-design",
   },
   {
     id: "development",
@@ -27,6 +29,7 @@ const services = [
       "Full-stack expertise in Next.js, NestJS, React, and beyond. We build scalable, performant applications that power your business.",
     features: ["Next.js & React", "Node.js & NestJS", "Headless CMS", "API Development"],
     color: "purple",
+    href: "/services/web-development",
   },
   {
     id: "software",
@@ -36,6 +39,7 @@ const services = [
       "CRMs, ERPs, dashboards, and internal tools built from scratch. If you can imagine it, we can build it.",
     features: ["CRM & ERP Systems", "Dashboard Development", "Workflow Automation", "Real-time Applications"],
     color: "cyan",
+    href: "/services/custom-software",
   },
   {
     id: "integrations",
@@ -45,6 +49,7 @@ const services = [
       "Connect any system to anything. APIs, webhooks, automation workflows—if it exists, we can integrate it.",
     features: ["API Integrations", "N8N & Automation", "Payment Gateways", "Third-party Services"],
     color: "purple",
+    href: "/services/integrations",
   },
 ];
 
@@ -183,15 +188,19 @@ export function Services() {
                       ))}
                     </ul>
 
-                    <button
+                    <Link
+                      href={service.href}
                       className={cn(
-                        "px-6 py-3 rounded-full font-semibold transition-all duration-300",
+                        "inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold transition-all duration-300",
                         colors.bg,
-                        "text-white hover:scale-105"
+                        "text-white hover:scale-105 hover:shadow-lg"
                       )}
                     >
                       Learn More
-                    </button>
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </Link>
                   </div>
 
                   {/* Animated Visual */}

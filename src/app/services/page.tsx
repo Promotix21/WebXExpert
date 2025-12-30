@@ -9,6 +9,7 @@ import { InnerHeader } from "@/components/layout/InnerHeader";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Footer } from "@/components/sections/Footer";
 import { cn } from "@/lib/utils";
+import { ProfessionalServiceSchema, BreadcrumbSchema } from "@/components/seo/JsonLd";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -234,6 +235,13 @@ export default function ServicesPage() {
 
   return (
     <>
+      {/* SEO Schema */}
+      <ProfessionalServiceSchema />
+      <BreadcrumbSchema items={[
+        { name: "Home", url: "/" },
+        { name: "Services", url: "/services" }
+      ]} />
+
       <InnerHeader />
 
       <main className="bg-black min-h-screen">

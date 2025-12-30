@@ -5,6 +5,7 @@ import { Services } from "@/components/sections/Services";
 import { CapabilityShowcase } from "@/components/sections/CapabilityShowcase";
 import { About } from "@/components/sections/About";
 import { Process } from "@/components/sections/Process";
+import { Testimonials } from "@/components/sections/Testimonials";
 import { TechStack } from "@/components/sections/TechStack";
 import { CTA } from "@/components/sections/CTA";
 import { Footer } from "@/components/sections/Footer";
@@ -20,6 +21,7 @@ export default function Home() {
         <CapabilityShowcase />
         <About />
         <Process />
+        <Testimonials />
         <TechStack />
         <CTA />
       </main>

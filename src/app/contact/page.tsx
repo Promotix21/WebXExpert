@@ -8,6 +8,7 @@ import { InnerHeader } from "@/components/layout/InnerHeader";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Footer } from "@/components/sections/Footer";
 import { cn } from "@/lib/utils";
+import { ContactPageSchema, FAQSchema, BreadcrumbSchema } from "@/components/seo/JsonLd";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -141,8 +142,35 @@ export default function ContactPage() {
     }
   };
 
+  const faqs = [
+    {
+      question: "How long does a typical project take?",
+      answer: "Project timelines vary based on scope. A marketing website typically takes 4-6 weeks, while complex applications can take 3-6 months. We'll provide a detailed timeline after our discovery call.",
+    },
+    {
+      question: "What's your development process?",
+      answer: "We follow an agile methodology with 2-week sprints. You'll see progress regularly, provide feedback, and stay in control throughout the project.",
+    },
+    {
+      question: "Do you provide ongoing support?",
+      answer: "Yes! We offer maintenance packages and ongoing support. We don't just build and disappear—we're here for the long haul.",
+    },
+    {
+      question: "Can you work with our existing team?",
+      answer: "Absolutely. We regularly collaborate with in-house teams, acting as an extension rather than a replacement.",
+    },
+  ];
+
   return (
     <>
+      {/* SEO Schema */}
+      <ContactPageSchema />
+      <FAQSchema faqs={faqs} />
+      <BreadcrumbSchema items={[
+        { name: "Home", url: "/" },
+        { name: "Contact", url: "/contact" }
+      ]} />
+
       <InnerHeader />
 
       <main className="bg-black min-h-screen">
@@ -431,30 +459,13 @@ export default function ContactPage() {
             </div>
 
             <div className="max-w-3xl mx-auto space-y-4">
-              {[
-                {
-                  q: "How long does a typical project take?",
-                  a: "Project timelines vary based on scope. A marketing website typically takes 4-6 weeks, while complex applications can take 3-6 months. We'll provide a detailed timeline after our discovery call.",
-                },
-                {
-                  q: "What's your development process?",
-                  a: "We follow an agile methodology with 2-week sprints. You'll see progress regularly, provide feedback, and stay in control throughout the project.",
-                },
-                {
-                  q: "Do you provide ongoing support?",
-                  a: "Yes! We offer maintenance packages and ongoing support. We don't just build and disappear—we're here for the long haul.",
-                },
-                {
-                  q: "Can you work with our existing team?",
-                  a: "Absolutely. We regularly collaborate with in-house teams, acting as an extension rather than a replacement.",
-                },
-              ].map((faq, i) => (
+              {faqs.map((faq, i) => (
                 <div
                   key={i}
                   className="p-6 rounded-2xl bg-surface-200/50 border border-surface-300/30"
                 >
-                  <h3 className="font-semibold mb-2">{faq.q}</h3>
-                  <p className="text-neutral-400 text-sm">{faq.a}</p>
+                  <h3 className="font-semibold mb-2">{faq.question}</h3>
+                  <p className="text-neutral-400 text-sm">{faq.answer}</p>
                 </div>
               ))}
             </div>
