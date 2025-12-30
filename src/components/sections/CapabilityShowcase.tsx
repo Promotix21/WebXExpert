@@ -18,7 +18,7 @@ const capabilities = [
     subtitle: "Complete Property Management",
     description:
       "End-to-end CRM with lead capture, EMI calculations, WhatsApp automation, and Facebook Ads integration. Turn property inquiries into closed deals with intelligent automation.",
-    color: "pink",
+    color: "cyan",
     features: ["Lead Capture Forms", "EMI Calculator", "WhatsApp Integration", "FB Ads Sync"],
     nodes: [
       { id: "fb", label: "FB Ads", x: 15, y: 25 },
@@ -110,7 +110,7 @@ const capabilities = [
     subtitle: "Custom Shopping Experiences",
     description:
       "Complete e-commerce with inventory sync, payment gateways, and automated fulfillment. Build stores that convert visitors into loyal customers.",
-    color: "pink",
+    color: "cyan",
     features: ["Inventory Sync", "Payment Gateway", "Auto Fulfillment", "Customer Portal"],
     nodes: [
       { id: "browse", label: "Browse", x: 12, y: 35 },
@@ -150,17 +150,6 @@ const capabilities = [
 
 const getColorClasses = (color: string) => {
   switch (color) {
-    case "pink":
-      return {
-        accent: "#FF0080",
-        glow: "rgba(255, 0, 128, 0.5)",
-        bg: "bg-brand-pink-500",
-        bgLight: "bg-brand-pink-500/10",
-        text: "text-brand-pink-500",
-        border: "border-brand-pink-500/30",
-        shadow: "shadow-[0_0_60px_rgba(255,0,128,0.2)]",
-        gradient: "from-brand-pink-500/20 to-transparent",
-      };
     case "cyan":
       return {
         accent: "#00D4FF",
@@ -185,14 +174,14 @@ const getColorClasses = (color: string) => {
       };
     default:
       return {
-        accent: "#FF0080",
-        glow: "rgba(255, 0, 128, 0.5)",
-        bg: "bg-brand-pink-500",
-        bgLight: "bg-brand-pink-500/10",
-        text: "text-brand-pink-500",
-        border: "border-brand-pink-500/30",
-        shadow: "shadow-[0_0_60px_rgba(255,0,128,0.2)]",
-        gradient: "from-brand-pink-500/20 to-transparent",
+        accent: "#00D4FF",
+        glow: "rgba(0, 212, 255, 0.5)",
+        bg: "bg-brand-cyan-500",
+        bgLight: "bg-brand-cyan-500/10",
+        text: "text-brand-cyan-500",
+        border: "border-brand-cyan-500/30",
+        shadow: "shadow-[0_0_60px_rgba(0,212,255,0.2)]",
+        gradient: "from-brand-cyan-500/20 to-transparent",
       };
   }
 };
@@ -291,14 +280,14 @@ export function CapabilityShowcase() {
   return (
     <section ref={sectionRef} id="work" className="relative bg-black overflow-hidden">
       {/* Background gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,0,128,0.05)_0%,transparent_70%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,212,255,0.05)_0%,transparent_70%)]" />
 
       {/* Fixed Header */}
       <div className="fixed top-0 left-0 right-0 z-50 pt-6 md:pt-8 pointer-events-none opacity-0 capability-header">
         <div className="container-main">
           <div className="flex items-center justify-between">
             <div>
-              <span className="text-sm text-brand-pink-500 font-medium tracking-widest uppercase mb-1 block">
+              <span className="text-sm text-brand-cyan-500 font-medium tracking-widest uppercase mb-1 block">
                 What We Build
               </span>
               <h2 className="text-2xl md:text-3xl font-bold">
@@ -312,7 +301,7 @@ export function CapabilityShowcase() {
                 <div className="w-20 h-0.5 bg-surface-300 rounded-full overflow-hidden">
                   <div
                     ref={progressRef}
-                    className="h-full w-0 bg-gradient-to-r from-brand-pink-500 via-brand-purple-500 to-brand-cyan-500 rounded-full"
+                    className="h-full w-0 bg-gradient-to-r from-brand-cyan-500 via-brand-purple-500 to-brand-cyan-400 rounded-full"
                   />
                 </div>
                 <span className="text-[10px] text-neutral-600">06</span>
@@ -333,8 +322,8 @@ export function CapabilityShowcase() {
               key={capability.id}
               className="capability-card shrink-0 w-screen h-screen flex items-center"
             >
-              {/* Full-screen 50/50 layout */}
-              <div className="w-full h-full grid grid-cols-1 lg:grid-cols-2">
+              {/* Full-screen 40/60 layout - more space for animation */}
+              <div className="w-full h-full grid grid-cols-1 lg:grid-cols-[40%_60%]">
                 {/* Left Side - Content */}
                 <div className="card-left-content flex flex-col justify-center px-8 md:px-12 lg:px-16 xl:px-24 py-20 lg:py-0">
                   {/* Number badge */}

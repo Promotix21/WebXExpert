@@ -23,11 +23,11 @@ function FloatingShapes() {
 
   return (
     <group ref={groupRef}>
-      {/* Main morphing sphere - Pink */}
+      {/* Main morphing sphere - Cyan */}
       <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
         <Sphere args={[1, 64, 64]} position={[2.5, 0, 0]}>
           <MeshDistortMaterial
-            color="#FF0080"
+            color="#00D4FF"
             attach="material"
             distort={0.4}
             speed={2}
@@ -74,7 +74,7 @@ function FloatingShapes() {
       {/* Small accent spheres */}
       <Float speed={2.5} rotationIntensity={0.2} floatIntensity={1.2}>
         <Sphere args={[0.2, 16, 16]} position={[1, 2, -2]}>
-          <meshStandardMaterial color="#FF0080" emissive="#FF0080" emissiveIntensity={0.5} />
+          <meshStandardMaterial color="#00D4FF" emissive="#00D4FF" emissiveIntensity={0.5} />
         </Sphere>
       </Float>
 
@@ -103,10 +103,10 @@ function Particles({ count = 300 }: { count?: number }) {
       // Random colors between pink, cyan, and white
       const colorChoice = Math.random();
       if (colorChoice < 0.33) {
-        // Pink
-        col[i * 3] = 1;
-        col[i * 3 + 1] = 0;
-        col[i * 3 + 2] = 0.5;
+        // Cyan
+        col[i * 3] = 0;
+        col[i * 3 + 1] = 0.83;
+        col[i * 3 + 2] = 1;
       } else if (colorChoice < 0.66) {
         // Cyan
         col[i * 3] = 0;
@@ -167,7 +167,7 @@ function MovingLight() {
       ref={lightRef}
       position={[0, 0, 5]}
       intensity={2}
-      color="#FF0080"
+      color="#00D4FF"
       distance={15}
     />
   );

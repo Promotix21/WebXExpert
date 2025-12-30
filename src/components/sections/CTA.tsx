@@ -122,7 +122,7 @@ export function CTA() {
       className="py-20 md:py-32 bg-black relative overflow-hidden"
     >
       {/* Animated gradient orbs */}
-      <div className="cta-orb-1 absolute top-0 left-0 w-[600px] h-[600px] rounded-full bg-brand-pink-500/10 blur-[150px] pointer-events-none" />
+      <div className="cta-orb-1 absolute top-0 left-0 w-[600px] h-[600px] rounded-full bg-brand-cyan-500/10 blur-[150px] pointer-events-none" />
       <div className="cta-orb-2 absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full bg-brand-purple-700/10 blur-[150px] pointer-events-none" />
       <div className="cta-orb-3 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-brand-cyan-500/5 blur-[120px] pointer-events-none" />
 
@@ -130,13 +130,13 @@ export function CTA() {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Left side - Content */}
           <div className="cta-content">
-            <span className="text-sm text-brand-pink-500 font-medium tracking-widest uppercase mb-4 block">
+            <span className="text-sm text-brand-cyan-500 font-medium tracking-widest uppercase mb-4 block">
               Let&apos;s Build Something
             </span>
 
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
               Ready to Build Something{" "}
-              <span className="bg-gradient-to-r from-brand-pink-500 via-brand-purple-500 to-brand-cyan-500 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-brand-cyan-500 via-brand-purple-500 to-brand-cyan-500 bg-clip-text text-transparent">
                 Extraordinary
               </span>
               ?
@@ -151,9 +151,9 @@ export function CTA() {
             <div className="space-y-4">
               <a
                 href="mailto:hello@webxexpert.com"
-                className="flex items-center gap-4 p-4 rounded-xl bg-surface-100/50 border border-surface-300/30 hover:border-brand-pink-500/50 transition-all duration-300 group"
+                className="flex items-center gap-4 p-4 rounded-xl bg-surface-100/50 border border-surface-300/30 hover:border-brand-cyan-500/50 transition-all duration-300 group"
               >
-                <div className="w-12 h-12 rounded-lg bg-brand-pink-500/10 flex items-center justify-center text-brand-pink-500 group-hover:bg-brand-pink-500 group-hover:text-white transition-all duration-300">
+                <div className="w-12 h-12 rounded-lg bg-brand-cyan-500/10 flex items-center justify-center text-brand-cyan-500 group-hover:bg-brand-cyan-500 group-hover:text-white transition-all duration-300">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
@@ -208,7 +208,7 @@ export function CTA() {
                       value={formData.name}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 bg-surface-200/50 border border-surface-300/50 rounded-xl text-white placeholder-neutral-500 focus:outline-none focus:border-brand-pink-500 focus:ring-1 focus:ring-brand-pink-500 transition-all duration-300"
+                      className="w-full px-4 py-3 bg-surface-200/50 border border-surface-300/50 rounded-xl text-white placeholder-neutral-500 focus:outline-none focus:border-brand-cyan-500 focus:ring-1 focus:ring-brand-cyan-500 transition-all duration-300"
                       placeholder="John Doe"
                     />
                   </div>
@@ -224,7 +224,7 @@ export function CTA() {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 bg-surface-200/50 border border-surface-300/50 rounded-xl text-white placeholder-neutral-500 focus:outline-none focus:border-brand-pink-500 focus:ring-1 focus:ring-brand-pink-500 transition-all duration-300"
+                      className="w-full px-4 py-3 bg-surface-200/50 border border-surface-300/50 rounded-xl text-white placeholder-neutral-500 focus:outline-none focus:border-brand-cyan-500 focus:ring-1 focus:ring-brand-cyan-500 transition-all duration-300"
                       placeholder="john@company.com"
                     />
                   </div>
@@ -240,7 +240,7 @@ export function CTA() {
                         name="company"
                         value={formData.company}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 bg-surface-200/50 border border-surface-300/50 rounded-xl text-white placeholder-neutral-500 focus:outline-none focus:border-brand-pink-500 focus:ring-1 focus:ring-brand-pink-500 transition-all duration-300"
+                        className="w-full px-4 py-3 bg-surface-200/50 border border-surface-300/50 rounded-xl text-white placeholder-neutral-500 focus:outline-none focus:border-brand-cyan-500 focus:ring-1 focus:ring-brand-cyan-500 transition-all duration-300"
                         placeholder="Company Inc."
                       />
                     </div>
@@ -253,7 +253,7 @@ export function CTA() {
                         name="budget"
                         value={formData.budget}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 bg-surface-200/50 border border-surface-300/50 rounded-xl text-white focus:outline-none focus:border-brand-pink-500 focus:ring-1 focus:ring-brand-pink-500 transition-all duration-300"
+                        className="w-full px-4 py-3 bg-surface-200/50 border border-surface-300/50 rounded-xl text-white focus:outline-none focus:border-brand-cyan-500 focus:ring-1 focus:ring-brand-cyan-500 transition-all duration-300"
                       >
                         <option value="" className="bg-surface-200">Select...</option>
                         <option value="5k-10k" className="bg-surface-200">$5K - $10K</option>
@@ -275,7 +275,7 @@ export function CTA() {
                       onChange={handleChange}
                       required
                       rows={4}
-                      className="w-full px-4 py-3 bg-surface-200/50 border border-surface-300/50 rounded-xl text-white placeholder-neutral-500 focus:outline-none focus:border-brand-pink-500 focus:ring-1 focus:ring-brand-pink-500 transition-all duration-300 resize-none"
+                      className="w-full px-4 py-3 bg-surface-200/50 border border-surface-300/50 rounded-xl text-white placeholder-neutral-500 focus:outline-none focus:border-brand-cyan-500 focus:ring-1 focus:ring-brand-cyan-500 transition-all duration-300 resize-none"
                       placeholder="I need a website for..."
                     />
                   </div>
@@ -285,8 +285,8 @@ export function CTA() {
                     disabled={isSubmitting}
                     className={cn(
                       "form-field w-full py-4 rounded-xl font-semibold text-white transition-all duration-300",
-                      "bg-gradient-to-r from-brand-pink-500 to-brand-pink-600",
-                      "hover:shadow-[0_0_40px_rgba(255,0,128,0.4)]",
+                      "bg-gradient-to-r from-brand-cyan-500 to-brand-cyan-600",
+                      "hover:shadow-[0_0_40px_rgba(0,212,255,0.4)]",
                       "disabled:opacity-50 disabled:cursor-not-allowed"
                     )}
                   >
@@ -311,7 +311,7 @@ export function CTA() {
             </div>
 
             {/* Decorative elements */}
-            <div className="absolute -top-4 -right-4 w-24 h-24 border border-brand-pink-500/20 rounded-2xl -z-10" />
+            <div className="absolute -top-4 -right-4 w-24 h-24 border border-brand-cyan-500/20 rounded-2xl -z-10" />
             <div className="absolute -bottom-4 -left-4 w-32 h-32 border border-brand-cyan-500/20 rounded-2xl -z-10" />
           </div>
         </div>

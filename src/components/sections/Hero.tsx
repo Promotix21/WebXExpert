@@ -161,7 +161,7 @@ export function Hero() {
         {/* Overline */}
         <div className="hero-overline mb-6 md:mb-8">
           <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
-            <span className="w-2 h-2 rounded-full bg-brand-pink-500 animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-brand-cyan-500 animate-pulse" />
             <span className="text-xs md:text-sm font-medium tracking-widest uppercase text-neutral-300">
               Premium Web Solutions
             </span>
@@ -187,7 +187,7 @@ export function Hero() {
               >
                 {highlightWords.includes(word) ? (
                   <span
-                    className="bg-gradient-to-r from-brand-pink-500 via-brand-purple-500 to-brand-cyan-500 bg-clip-text text-transparent font-black"
+                    className="bg-gradient-to-r from-brand-cyan-500 via-brand-purple-500 to-brand-cyan-400 bg-clip-text text-transparent font-black"
                     style={{
                       backgroundSize: "200% auto",
                     }}
@@ -215,7 +215,7 @@ export function Hero() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 md:mb-24">
           <a
             href="#contact"
-            className="hero-cta group relative px-8 py-4 text-base md:text-lg font-semibold text-white bg-gradient-to-r from-brand-pink-500 to-brand-pink-600 rounded-full overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_rgba(255,0,128,0.4)] w-full sm:w-auto"
+            className="hero-cta group relative px-8 py-4 text-base md:text-lg font-semibold text-black bg-gradient-to-r from-brand-cyan-500 to-brand-cyan-600 rounded-full overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_rgba(0,212,255,0.4)] w-full sm:w-auto"
             data-cursor-text="Let's talk"
           >
             <span className="relative z-10 flex items-center justify-center gap-2">
@@ -269,7 +269,7 @@ export function Hero() {
           Scroll
         </span>
         <div className="w-5 h-8 rounded-full border border-neutral-600 flex items-start justify-center pt-2 overflow-hidden">
-          <div className="scroll-dot w-1 h-1.5 rounded-full bg-gradient-to-b from-brand-pink-500 to-brand-cyan-500" />
+          <div className="scroll-dot w-1 h-1.5 rounded-full bg-gradient-to-b from-brand-cyan-500 to-brand-purple-500" />
         </div>
       </div>
 
@@ -297,7 +297,7 @@ function StatItem({
     <div className="hero-stat text-center" style={{ animationDelay: `${delay}s` }}>
       <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 md:mb-2">
         <span
-          className="counter-value bg-gradient-to-r from-brand-pink-500 to-brand-cyan-500 bg-clip-text text-transparent"
+          className="counter-value bg-gradient-to-r from-brand-cyan-500 to-brand-purple-500 bg-clip-text text-transparent"
           data-target={value}
           data-suffix={suffix}
         >

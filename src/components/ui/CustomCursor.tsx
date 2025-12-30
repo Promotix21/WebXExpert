@@ -121,7 +121,7 @@ export function CustomCursor() {
         <div
           className={`w-10 h-10 rounded-full border-2 transition-all duration-300 ${
             isHovering
-              ? "border-brand-pink-500 bg-brand-pink-500/10"
+              ? "border-brand-cyan-500 bg-brand-cyan-500/10"
               : "border-white"
           }`}
         />
@@ -137,7 +137,7 @@ export function CustomCursor() {
       >
         <div
           className={`w-1.5 h-1.5 rounded-full transition-all duration-200 ${
-            isHovering ? "bg-brand-pink-500 scale-0" : "bg-white scale-100"
+            isHovering ? "bg-brand-cyan-500 scale-0" : "bg-white scale-100"
           }`}
         />
       </div>

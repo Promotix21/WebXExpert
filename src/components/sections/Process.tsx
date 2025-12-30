@@ -21,7 +21,7 @@ const processSteps = [
         <circle cx="11" cy="11" r="3" stroke="currentColor" strokeWidth="2" />
       </svg>
     ),
-    color: "pink",
+    color: "cyan",
   },
   {
     number: "02",
@@ -73,7 +73,7 @@ const processSteps = [
         <path d="M7 17L3 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
       </svg>
     ),
-    color: "pink",
+    color: "cyan",
   },
 ];
 
@@ -166,13 +166,6 @@ export function Process() {
 
   const getColorClasses = (color: string) => {
     switch (color) {
-      case "pink":
-        return {
-          bg: "bg-brand-pink-500/10",
-          border: "border-brand-pink-500/30",
-          text: "text-brand-pink-500",
-          glow: "hover:shadow-[0_0_40px_rgba(255,0,128,0.2)]",
-        };
       case "cyan":
         return {
           bg: "bg-brand-cyan-500/10",
@@ -224,7 +217,7 @@ export function Process() {
                 <div className="w-24 h-1 bg-surface-300 rounded-full overflow-hidden">
                   <div
                     ref={progressRef}
-                    className="h-full w-0 bg-gradient-to-r from-brand-pink-500 via-brand-purple-500 to-brand-cyan-500 rounded-full"
+                    className="h-full w-0 bg-gradient-to-r from-brand-cyan-500 via-brand-purple-500 to-brand-cyan-400 rounded-full"
                   />
                 </div>
                 <span className="text-xs text-neutral-600">05</span>

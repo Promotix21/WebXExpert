@@ -124,7 +124,7 @@ export function TextMarquee({
   items,
   className,
   textClassName,
-  separator = <span className="text-brand-pink-500 mx-4">•</span>,
+  separator = <span className="text-brand-cyan-500 mx-4">•</span>,
   speed = 50,
   direction = "left",
 }: TextMarqueeProps) {

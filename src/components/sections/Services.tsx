@@ -17,7 +17,7 @@ const services = [
     description:
       "Award-worthy designs with GSAP animations, WebGL experiences, and interactions that captivate. Every pixel crafted with purpose.",
     features: ["Motion Design & GSAP", "WebGL & Three.js", "Responsive & Mobile-First", "Conversion-Focused UX"],
-    color: "pink",
+    color: "cyan",
   },
   {
     id: "development",
@@ -93,15 +93,6 @@ export function Services() {
 
   const getColorClasses = (color: string) => {
     switch (color) {
-      case "pink":
-        return {
-          accent: "#FF0080",
-          bg: "bg-brand-pink-500",
-          bgLight: "bg-brand-pink-500/10",
-          text: "text-brand-pink-500",
-          border: "border-brand-pink-500/30",
-          glow: "shadow-[0_0_60px_rgba(255,0,128,0.15)]",
-        };
       case "cyan":
         return {
           accent: "#00D4FF",
@@ -122,12 +113,12 @@ export function Services() {
         };
       default:
         return {
-          accent: "#FF0080",
-          bg: "bg-brand-pink-500",
-          bgLight: "bg-brand-pink-500/10",
-          text: "text-brand-pink-500",
-          border: "border-brand-pink-500/30",
-          glow: "shadow-[0_0_60px_rgba(255,0,128,0.15)]",
+          accent: "#00D4FF",
+          bg: "bg-brand-cyan-500",
+          bgLight: "bg-brand-cyan-500/10",
+          text: "text-brand-cyan-500",
+          border: "border-brand-cyan-500/30",
+          glow: "shadow-[0_0_60px_rgba(0,212,255,0.15)]",
         };
     }
   };
@@ -137,12 +128,12 @@ export function Services() {
       {/* Section Header */}
       <div className="container-main pt-20 md:pt-32 pb-12">
         <div className="max-w-3xl">
-          <span className="text-sm text-brand-pink-500 font-medium tracking-widest uppercase mb-4 block">
+          <span className="text-sm text-brand-cyan-500 font-medium tracking-widest uppercase mb-4 block">
             What We Do
           </span>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
             Building{" "}
-            <span className="bg-gradient-to-r from-brand-pink-500 to-brand-purple-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-brand-cyan-500 to-brand-purple-500 bg-clip-text text-transparent">
               Extraordinary
             </span>{" "}
             Digital Products
@@ -398,13 +389,13 @@ function WireframeAnimation({ color }: { color: string }) {
 // Code Typing Animation
 function CodeAnimation({ color }: { color: string }) {
   const codeLines = [
-    { indent: 0, keyword: "function", text: " buildAwesome() {", kwColor: "#FF0080" },
+    { indent: 0, keyword: "function", text: " buildAwesome() {", kwColor: "#00D4FF" },
     { indent: 1, keyword: "const", text: " design = ", value: "'pixel-perfect'", kwColor: "#00D4FF" },
     { indent: 1, keyword: "const", text: " code = ", value: "'clean'", kwColor: "#00D4FF" },
     { indent: 1, keyword: "const", text: " result = ", value: "'extraordinary'", kwColor: "#00D4FF" },
     { indent: 1, keyword: "", text: "" },
     { indent: 1, keyword: "return", text: " magic(design, code)", kwColor: "#7C3AED" },
-    { indent: 0, keyword: "}", text: "", kwColor: "#FF0080" },
+    { indent: 0, keyword: "}", text: "", kwColor: "#00D4FF" },
   ];
 
   return (
