@@ -28,12 +28,10 @@ export function CustomCursor() {
       mouseY = e.clientY;
       setIsVisible(true);
 
-      // Instant dot movement
-      gsap.to(cursorDot, {
+      // Instant dot movement - no delay
+      gsap.set(cursorDot, {
         x: mouseX,
         y: mouseY,
-        duration: 0.1,
-        ease: "power2.out",
       });
     };
 
@@ -45,10 +43,10 @@ export function CustomCursor() {
       setIsVisible(true);
     };
 
-    // Smooth cursor follow animation
+    // Smooth cursor follow animation - faster lerp for snappier response
     const animateCursor = () => {
-      cursorX += (mouseX - cursorX) * 0.15;
-      cursorY += (mouseY - cursorY) * 0.15;
+      cursorX += (mouseX - cursorX) * 0.25;
+      cursorY += (mouseY - cursorY) * 0.25;
 
       gsap.set(cursor, {
         x: cursorX,
