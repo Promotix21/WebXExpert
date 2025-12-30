@@ -164,6 +164,66 @@ export function TechStack() {
     // Keep mouse in sync
     render.mouse = mouse;
 
+    // Click to "irritate" balls - apply explosive force
+    const handleClick = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+
+      const allBodies = Matter.Composite.allBodies(engine.world);
+
+      allBodies.forEach((body) => {
+        if (body.isStatic) return;
+
+        // Calculate distance from click to body
+        const dx = body.position.x - clickX;
+        const dy = body.position.y - clickY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const radius = (body.plugin as any)?.radius || 50;
+
+        // If clicked directly on the ball
+        if (distance < radius + 20) {
+          // Apply strong random force - "irritated" reaction
+          const forceMagnitude = 0.15 + Math.random() * 0.1;
+          const angle = Math.atan2(dy, dx) + (Math.random() - 0.5) * 0.5;
+
+          Matter.Body.applyForce(body, body.position, {
+            x: Math.cos(angle) * forceMagnitude,
+            y: Math.sin(angle) * forceMagnitude - 0.1, // Slight upward bias
+          });
+
+          // Add aggressive spin
+          Matter.Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.5);
+
+          // Brief "shake" effect - rapid small forces
+          let shakeCount = 0;
+          const shakeInterval = setInterval(() => {
+            if (shakeCount >= 5) {
+              clearInterval(shakeInterval);
+              return;
+            }
+            Matter.Body.applyForce(body, body.position, {
+              x: (Math.random() - 0.5) * 0.02,
+              y: (Math.random() - 0.5) * 0.02,
+            });
+            shakeCount++;
+          }, 50);
+        }
+        // Nearby balls also react (ripple effect)
+        else if (distance < 200) {
+          const forceMagnitude = 0.03 * (1 - distance / 200);
+          const angle = Math.atan2(dy, dx);
+
+          Matter.Body.applyForce(body, body.position, {
+            x: Math.cos(angle) * forceMagnitude,
+            y: Math.sin(angle) * forceMagnitude,
+          });
+        }
+      });
+    };
+
+    canvas.addEventListener("click", handleClick);
+
     // Run engine and renderer
     Matter.Render.run(render);
     const runner = Matter.Runner.create();
@@ -207,6 +267,7 @@ export function TechStack() {
 
     // Cleanup
     return () => {
+      canvas.removeEventListener("click", handleClick);
       Matter.Render.stop(render);
       Matter.Runner.stop(runner);
       Matter.Engine.clear(engine);
@@ -275,7 +336,7 @@ export function TechStack() {
           {/* Instruction overlay */}
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-center">
             <span className="text-xs text-neutral-500 px-4 py-2 bg-surface-100/50 backdrop-blur-sm rounded-full">
-              Drag and throw the tech badges!
+              Click or drag the tech badges!
             </span>
           </div>
         </div>
