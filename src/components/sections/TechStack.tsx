@@ -103,12 +103,28 @@ export function TechStack() {
 
     Matter.Composite.add(engine.world, walls);
 
-    // Create tech item bodies
+    // Create tech item bodies with varied sizes
     const bodies: Matter.Body[] = [];
+
+    // Size categories: small, medium, large, xlarge
+    const sizeCategories = [
+      { min: 40, max: 50 },   // Small
+      { min: 55, max: 65 },   // Medium
+      { min: 70, max: 80 },   // Large
+      { min: 85, max: 100 },  // XLarge
+    ];
+
     techItems.forEach((item, i) => {
-      const x = Math.random() * (width - 100) + 50;
-      const y = -100 - Math.random() * 500; // Start above viewport
-      const radius = 35 + Math.random() * 15;
+      // Distribute across different sizes based on index
+      const sizeCategory = sizeCategories[i % 4];
+      const radius = sizeCategory.min + Math.random() * (sizeCategory.max - sizeCategory.min);
+
+      // Spread starting positions more - use grid-like distribution
+      const cols = 4;
+      const col = i % cols;
+      const colWidth = (width - 200) / cols;
+      const x = 100 + col * colWidth + Math.random() * colWidth * 0.5;
+      const y = -150 - Math.floor(i / cols) * 200 - Math.random() * 100; // Stagger vertically
 
       const body = Matter.Bodies.circle(x, y, radius, {
         restitution: 0.6,
@@ -117,9 +133,11 @@ export function TechStack() {
         render: {
           fillStyle: item.color + "20",
           strokeStyle: item.color,
-          lineWidth: 2,
+          lineWidth: 3,
         },
         label: item.name,
+        // Store radius for text scaling
+        plugin: { radius },
       });
 
       bodies.push(body);
@@ -151,7 +169,7 @@ export function TechStack() {
     const runner = Matter.Runner.create();
     Matter.Runner.run(runner, engine);
 
-    // Custom render for text labels
+    // Custom render for text labels - scale based on ball size
     Matter.Events.on(render, "afterRender", () => {
       const ctx = render.context;
       const allBodies = Matter.Composite.allBodies(engine.world);
@@ -160,20 +178,26 @@ export function TechStack() {
         if (body.label && body.label !== "Rectangle Body" && body.label !== "Circle Body") {
           const item = techItems.find((t) => t.name === body.label);
           if (item) {
+            // Get stored radius for scaling
+            const radius = (body.plugin as any)?.radius || 50;
+            const scale = radius / 60; // Base scale factor
+
             ctx.save();
             ctx.translate(body.position.x, body.position.y);
             ctx.rotate(body.angle);
 
-            // Draw icon
-            ctx.font = "20px Arial";
+            // Draw icon - scaled
+            const iconSize = Math.round(24 * scale);
+            ctx.font = `${iconSize}px Arial`;
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
-            ctx.fillText(item.icon, 0, -8);
+            ctx.fillText(item.icon, 0, -radius * 0.15);
 
-            // Draw name
-            ctx.font = "bold 10px system-ui";
+            // Draw name - scaled
+            const nameSize = Math.round(11 * scale);
+            ctx.font = `bold ${nameSize}px system-ui`;
             ctx.fillStyle = "#FFFFFF";
-            ctx.fillText(item.name, 0, 12);
+            ctx.fillText(item.name, 0, radius * 0.3);
 
             ctx.restore();
           }
