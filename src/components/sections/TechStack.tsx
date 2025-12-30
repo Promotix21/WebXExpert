@@ -169,12 +169,13 @@ export function TechStack() {
         friction: 0.1,
         frictionAir: 0.01,
         render: {
-          fillStyle: item.color + "20",
-          strokeStyle: item.color,
-          lineWidth: 3,
+          // Make the physics body invisible - we'll draw the icon image instead
+          fillStyle: "transparent",
+          strokeStyle: "transparent",
+          lineWidth: 0,
         },
         label: item.name,
-        // Store radius for text scaling
+        // Store radius for image scaling
         plugin: { radius },
       });
 
@@ -267,43 +268,33 @@ export function TechStack() {
     const runner = Matter.Runner.create();
     Matter.Runner.run(runner, engine);
 
-    // Custom render for images - scale based on ball size
+    // Custom render for images - draw icon centered in ball
     Matter.Events.on(render, "afterRender", () => {
       const ctx = render.context;
       const allBodies = Matter.Composite.allBodies(engine.world);
 
       allBodies.forEach((body) => {
         if (body.label && body.label !== "Rectangle Body" && body.label !== "Circle Body") {
-          const item = techItems.find((t) => t.name === body.label);
           const img = imagesRef.current.get(body.label);
 
-          if (item) {
+          if (img) {
             // Get stored radius for scaling
             const radius = (body.plugin as any)?.radius || 50;
+            // Image should fill the ball diameter
+            const imgSize = radius * 2;
 
             ctx.save();
             ctx.translate(body.position.x, body.position.y);
             ctx.rotate(body.angle);
 
-            // Draw the icon image if loaded
-            if (img) {
-              const imgSize = radius * 1.5; // Icon takes up most of the ball
-              ctx.drawImage(
-                img,
-                -imgSize / 2,
-                -imgSize / 2,
-                imgSize,
-                imgSize
-              );
-            }
-
-            // Draw name below the icon
-            const nameSize = Math.round(11 * (radius / 60));
-            ctx.font = `bold ${nameSize}px system-ui`;
-            ctx.fillStyle = "#FFFFFF";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.fillText(item.name, 0, radius * 0.55);
+            // Draw the icon image centered
+            ctx.drawImage(
+              img,
+              -imgSize / 2,
+              -imgSize / 2,
+              imgSize,
+              imgSize
+            );
 
             ctx.restore();
           }
