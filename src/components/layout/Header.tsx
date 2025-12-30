@@ -165,10 +165,8 @@ export function Header() {
       <header
         ref={headerRef}
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
-          isScrolled
-            ? "bg-black/90 backdrop-blur-xl border-b border-white/5 py-2"
-            : "bg-transparent py-4"
+          "absolute top-0 left-0 right-0 z-50 transition-all duration-500",
+          "bg-transparent py-4"
         )}
       >
         <div className="container-main">
