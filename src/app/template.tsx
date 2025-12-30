@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
 import { gsap } from "gsap";
 
 interface TemplateProps {
@@ -12,8 +11,6 @@ interface TemplateProps {
 export default function Template({ children }: TemplateProps) {
   const pathname = usePathname();
   const overlayRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     // Scroll to top on route change
@@ -25,39 +22,31 @@ export default function Template({ children }: TemplateProps) {
     }
 
     const overlay = overlayRef.current;
-    const content = contentRef.current;
-    if (!overlay || !content) return;
+    if (!overlay) return;
 
-    // Create entrance animation timeline
+    // Create entrance animation timeline - only animate the overlay, not the content
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        onComplete: () => setIsReady(true)
-      });
-
-      // Animate columns revealing content
       const columns = overlay.querySelectorAll('.transition-column');
 
-      tl.set(columns, { scaleY: 1 })
-        .to(columns, {
+      // Quick reveal animation that doesn't touch page content
+      gsap.fromTo(columns,
+        { scaleY: 1 },
+        {
           scaleY: 0,
-          duration: 0.6,
-          stagger: 0.08,
-          ease: "power3.inOut",
+          duration: 0.5,
+          stagger: 0.06,
+          ease: "power2.inOut",
           transformOrigin: "top"
-        })
-        .fromTo(content,
-          { opacity: 0, y: 40 },
-          { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
-          "-=0.3"
-        );
+        }
+      );
     });
 
     return () => ctx.revert();
   }, [pathname]);
 
   return (
-    <div className="relative">
-      {/* Transition Overlay */}
+    <>
+      {/* Transition Overlay - reveals content from top */}
       <div
         ref={overlayRef}
         className="fixed inset-0 z-[9999] pointer-events-none flex"
@@ -78,51 +67,12 @@ export default function Template({ children }: TemplateProps) {
                   : "linear-gradient(90deg, #7C3AED 0%, #00D4FF 100%)"
               }}
             />
-            {/* Particle sparkle effect */}
-            <div className="absolute inset-0 overflow-hidden">
-              {[...Array(3)].map((_, j) => (
-                <motion.div
-                  key={j}
-                  className="absolute w-1 h-1 rounded-full bg-brand-cyan-500"
-                  initial={{
-                    x: Math.random() * 100 + "%",
-                    y: "100%",
-                    opacity: 0
-                  }}
-                  animate={{
-                    y: "-10%",
-                    opacity: [0, 1, 0],
-                  }}
-                  transition={{
-                    duration: 0.8,
-                    delay: i * 0.08 + j * 0.1,
-                    ease: "easeOut"
-                  }}
-                />
-              ))}
-            </div>
           </div>
         ))}
       </div>
 
-      {/* Page Content */}
-      <div ref={contentRef} style={{ opacity: 0 }}>
-        {children}
-      </div>
-
-      {/* Loading indicator for slow transitions */}
-      <AnimatePresence>
-        {!isReady && (
-          <motion.div
-            className="fixed bottom-8 right-8 z-[10000]"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-          >
-            <div className="w-10 h-10 rounded-full border-2 border-brand-cyan-500/30 border-t-brand-cyan-500 animate-spin" />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+      {/* Page Content - rendered directly without wrapper that affects opacity */}
+      {children}
+    </>
   );
 }
