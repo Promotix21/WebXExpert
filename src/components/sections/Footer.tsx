@@ -12,11 +12,11 @@ if (typeof window !== "undefined") {
 
 const footerLinks = {
   services: [
-    { label: "Web Design", href: "/services#web-design" },
-    { label: "Web Development", href: "/services#web-development" },
-    { label: "Custom Software", href: "/services#custom-software" },
-    { label: "CRM Development", href: "/work" },
-    { label: "API Integrations", href: "/services#integrations" },
+    { label: "Web Design", href: "/services/web-design" },
+    { label: "Web Development", href: "/services/web-development" },
+    { label: "Custom Software", href: "/services/custom-software" },
+    { label: "API Integrations", href: "/services/integrations" },
+    { label: "All Services", href: "/services" },
   ],
   company: [
     { label: "About Us", href: "/about" },
