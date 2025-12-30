@@ -268,33 +268,44 @@ export function TechStack() {
     const runner = Matter.Runner.create();
     Matter.Runner.run(runner, engine);
 
-    // Custom render for images - draw icon centered in ball
+    // Custom render for images - draw circle + icon centered in ball
     Matter.Events.on(render, "afterRender", () => {
       const ctx = render.context;
       const allBodies = Matter.Composite.allBodies(engine.world);
 
       allBodies.forEach((body) => {
         if (body.label && body.label !== "Rectangle Body" && body.label !== "Circle Body") {
+          const item = techItems.find((t) => t.name === body.label);
           const img = imagesRef.current.get(body.label);
 
-          if (img) {
+          if (item) {
             // Get stored radius for scaling
             const radius = (body.plugin as any)?.radius || 50;
-            // Image should fill the ball diameter
-            const imgSize = radius * 2;
 
             ctx.save();
             ctx.translate(body.position.x, body.position.y);
             ctx.rotate(body.angle);
 
-            // Draw the icon image centered
-            ctx.drawImage(
-              img,
-              -imgSize / 2,
-              -imgSize / 2,
-              imgSize,
-              imgSize
-            );
+            // Draw circle background
+            ctx.beginPath();
+            ctx.arc(0, 0, radius, 0, Math.PI * 2);
+            ctx.fillStyle = item.color + "15"; // Very subtle fill
+            ctx.fill();
+            ctx.strokeStyle = item.color;
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // Draw the icon image centered (slightly smaller than the circle)
+            if (img) {
+              const imgSize = radius * 1.6;
+              ctx.drawImage(
+                img,
+                -imgSize / 2,
+                -imgSize / 2,
+                imgSize,
+                imgSize
+              );
+            }
 
             ctx.restore();
           }
