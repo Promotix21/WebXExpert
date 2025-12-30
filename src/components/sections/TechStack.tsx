@@ -297,15 +297,23 @@ export function TechStack() {
 
             // Draw the icon image centered (slightly smaller than the circle)
             if (img) {
-              const imgSize = radius * 1.6;
+              const imgSize = radius * 1.4;
               ctx.drawImage(
                 img,
                 -imgSize / 2,
-                -imgSize / 2,
+                -imgSize / 2 - radius * 0.1, // Shift up slightly to make room for text
                 imgSize,
                 imgSize
               );
             }
+
+            // Draw tech name below the icon
+            const fontSize = Math.max(10, Math.round(radius * 0.22));
+            ctx.font = `bold ${fontSize}px system-ui, sans-serif`;
+            ctx.fillStyle = "#FFFFFF";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(item.name, 0, radius * 0.65);
 
             ctx.restore();
           }
