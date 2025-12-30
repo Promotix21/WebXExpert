@@ -2,9 +2,9 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { gsap } from "gsap";
 import { cn } from "@/lib/utils";
-import { useMagnetic } from "@/hooks/useGSAP";
 
 const navItems = [
   { label: "Services", href: "#services" },
@@ -19,7 +19,8 @@ export function Header() {
   const headerRef = useRef<HTMLElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const menuItemsRef = useRef<(HTMLAnchorElement | null)[]>([]);
-  const ctaRef = useMagnetic<HTMLButtonElement>(0.3);
+  const logoRef = useRef<HTMLDivElement>(null);
+  const ctaRef = useRef<HTMLButtonElement>(null);
 
   // Handle scroll
   useEffect(() => {
@@ -36,11 +37,72 @@ export function Header() {
     const header = headerRef.current;
     if (!header) return;
 
-    gsap.fromTo(
-      header,
-      { y: -100, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1, ease: "power3.out", delay: 0.5 }
-    );
+    const ctx = gsap.context(() => {
+      // Header slide in
+      gsap.fromTo(
+        header,
+        { y: -100, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, ease: "power3.out", delay: 0.2 }
+      );
+
+      // Logo reveal with scale
+      if (logoRef.current) {
+        gsap.fromTo(
+          logoRef.current,
+          { scale: 0.8, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.8, ease: "back.out(1.7)", delay: 0.5 }
+        );
+      }
+
+      // CTA button glow pulse
+      if (ctaRef.current) {
+        gsap.to(ctaRef.current, {
+          boxShadow: "0 0 30px rgba(255, 0, 128, 0.5)",
+          duration: 1.5,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+        });
+      }
+    });
+
+    return () => ctx.revert();
+  }, []);
+
+  // Magnetic effect for CTA button
+  useEffect(() => {
+    const btn = ctaRef.current;
+    if (!btn) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = btn.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+
+      gsap.to(btn, {
+        x: x * 0.3,
+        y: y * 0.3,
+        duration: 0.3,
+        ease: "power2.out",
+      });
+    };
+
+    const handleMouseLeave = () => {
+      gsap.to(btn, {
+        x: 0,
+        y: 0,
+        duration: 0.5,
+        ease: "elastic.out(1, 0.3)",
+      });
+    };
+
+    btn.addEventListener("mousemove", handleMouseMove);
+    btn.addEventListener("mouseleave", handleMouseLeave);
+
+    return () => {
+      btn.removeEventListener("mousemove", handleMouseMove);
+      btn.removeEventListener("mouseleave", handleMouseLeave);
+    };
   }, []);
 
   // Animate mobile menu
@@ -49,7 +111,6 @@ export function Header() {
     if (!menu) return;
 
     if (isMobileMenuOpen) {
-      // Prevent body scroll
       document.body.style.overflow = "hidden";
 
       gsap.fromTo(
@@ -63,7 +124,6 @@ export function Header() {
         }
       );
 
-      // Stagger menu items
       gsap.fromTo(
         menuItemsRef.current.filter(Boolean),
         { y: 50, opacity: 0 },
@@ -107,28 +167,36 @@ export function Header() {
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
           isScrolled
-            ? "bg-surface-000/80 backdrop-blur-lg border-b border-surface-300/50"
-            : "bg-transparent"
+            ? "bg-black/90 backdrop-blur-xl border-b border-white/5 py-2"
+            : "bg-transparent py-4"
         )}
       >
         <div className="container-main">
-          <nav className="flex items-center justify-between h-16 md:h-20 lg:h-24">
+          <nav className="flex items-center justify-between h-14 md:h-16">
             {/* Logo */}
             <Link
               href="/"
               className="relative z-60 flex items-center gap-2 group"
               onClick={closeMobileMenu}
             >
-              <Logo />
-              <span className="text-lg md:text-xl font-bold tracking-tight">
-                Web<span className="gradient-text">X</span>Expert
-              </span>
+              <div ref={logoRef} className="relative">
+                <Image
+                  src="/webxexpert-logo-light.png"
+                  alt="WebXExpert"
+                  width={180}
+                  height={45}
+                  className="h-8 md:h-10 w-auto"
+                  priority
+                />
+                {/* Hover glow effect */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-lg bg-gradient-to-r from-brand-pink-500/30 to-brand-cyan-500/30" />
+              </div>
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-8">
-              {navItems.map((item) => (
-                <NavLink key={item.href} href={item.href}>
+            <div className="hidden lg:flex items-center gap-1">
+              {navItems.map((item, index) => (
+                <NavLink key={item.href} href={item.href} index={index}>
                   {item.label}
                 </NavLink>
               ))}
@@ -138,9 +206,11 @@ export function Header() {
             <div className="hidden lg:block">
               <button
                 ref={ctaRef}
-                className="btn-primary px-6 py-2.5 text-sm"
+                className="relative px-6 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-brand-pink-500 to-brand-pink-600 rounded-full overflow-hidden group"
               >
-                Start Project
+                <span className="relative z-10">Start Project</span>
+                {/* Shine effect */}
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
               </button>
             </div>
 
@@ -153,19 +223,19 @@ export function Header() {
               <div className="relative w-6 h-4 flex flex-col justify-between">
                 <span
                   className={cn(
-                    "block h-0.5 bg-white transition-all duration-300 origin-center",
+                    "block h-0.5 rounded-full bg-white transition-all duration-300 origin-center",
                     isMobileMenuOpen && "rotate-45 translate-y-[7px]"
                   )}
                 />
                 <span
                   className={cn(
-                    "block h-0.5 bg-white transition-all duration-300",
+                    "block h-0.5 rounded-full bg-white transition-all duration-300",
                     isMobileMenuOpen && "opacity-0 scale-0"
                   )}
                 />
                 <span
                   className={cn(
-                    "block h-0.5 bg-white transition-all duration-300 origin-center",
+                    "block h-0.5 rounded-full bg-white transition-all duration-300 origin-center",
                     isMobileMenuOpen && "-rotate-45 -translate-y-[7px]"
                   )}
                 />
@@ -179,12 +249,15 @@ export function Header() {
       <div
         ref={mobileMenuRef}
         className={cn(
-          "fixed inset-0 z-50 bg-surface-000 opacity-0 pointer-events-none lg:hidden",
+          "fixed inset-0 z-50 bg-black opacity-0 pointer-events-none lg:hidden",
           isMobileMenuOpen && "pointer-events-auto"
         )}
       >
-        <div className="h-full flex flex-col justify-center items-center px-6">
-          <nav className="flex flex-col items-center gap-6">
+        {/* Gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-brand-pink-500/10 via-transparent to-brand-cyan-500/10" />
+
+        <div className="h-full flex flex-col justify-center items-center px-6 relative">
+          <nav className="flex flex-col items-center gap-8">
             {navItems.map((item, i) => (
               <a
                 key={item.href}
@@ -193,9 +266,10 @@ export function Header() {
                 }}
                 href={item.href}
                 onClick={closeMobileMenu}
-                className="text-4xl md:text-5xl font-bold text-white hover:text-brand-pink-500 transition-colors"
+                className="text-4xl md:text-5xl font-bold text-white hover:text-brand-pink-500 transition-colors relative group"
               >
-                {item.label}
+                <span className="relative z-10">{item.label}</span>
+                <span className="absolute -bottom-2 left-0 w-0 h-1 bg-gradient-to-r from-brand-pink-500 to-brand-cyan-500 group-hover:w-full transition-all duration-300" />
               </a>
             ))}
           </nav>
@@ -204,7 +278,7 @@ export function Header() {
             ref={(el) => {
               menuItemsRef.current[navItems.length] = el as unknown as HTMLAnchorElement;
             }}
-            className="btn-primary mt-12 text-lg px-8 py-4"
+            className="mt-12 px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-brand-pink-500 to-brand-pink-600 rounded-full"
             onClick={closeMobileMenu}
           >
             Start Project
@@ -236,9 +310,11 @@ export function Header() {
 function NavLink({
   href,
   children,
+  index,
 }: {
   href: string;
   children: React.ReactNode;
+  index: number;
 }) {
   const linkRef = useRef<HTMLAnchorElement>(null);
 
@@ -246,107 +322,31 @@ function NavLink({
     const link = linkRef.current;
     if (!link) return;
 
-    const underline = link.querySelector(".underline-animation");
-    if (!underline) return;
-
-    const handleMouseEnter = () => {
-      gsap.to(underline, {
-        scaleX: 1,
-        transformOrigin: "left",
-        duration: 0.3,
-        ease: "power2.out",
-      });
-    };
-
-    const handleMouseLeave = () => {
-      gsap.to(underline, {
-        scaleX: 0,
-        transformOrigin: "right",
-        duration: 0.3,
-        ease: "power2.out",
-      });
-    };
-
-    link.addEventListener("mouseenter", handleMouseEnter);
-    link.addEventListener("mouseleave", handleMouseLeave);
-
-    return () => {
-      link.removeEventListener("mouseenter", handleMouseEnter);
-      link.removeEventListener("mouseleave", handleMouseLeave);
-    };
-  }, []);
+    // Staggered entrance animation
+    gsap.fromTo(
+      link,
+      { y: -20, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.5,
+        ease: "power3.out",
+        delay: 0.6 + index * 0.1,
+      }
+    );
+  }, [index]);
 
   return (
     <a
       ref={linkRef}
       href={href}
-      className="relative text-sm font-medium text-neutral-300 hover:text-white transition-colors py-2"
+      className="relative px-4 py-2 text-sm font-medium text-neutral-400 hover:text-white transition-colors group"
     >
       {children}
-      <span className="underline-animation absolute bottom-0 left-0 w-full h-0.5 bg-brand-pink-500 scale-x-0" />
+      {/* Animated underline */}
+      <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-brand-pink-500 to-brand-cyan-500 group-hover:w-3/4 transition-all duration-300 rounded-full" />
+      {/* Hover glow */}
+      <span className="absolute inset-0 rounded-lg bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
     </a>
-  );
-}
-
-/**
- * WebXExpert Logo - Animated X mark
- */
-function Logo() {
-  const svgRef = useRef<SVGSVGElement>(null);
-
-  useEffect(() => {
-    const svg = svgRef.current;
-    if (!svg) return;
-
-    const triangle = svg.querySelector(".logo-triangle");
-    if (!triangle) return;
-
-    // Initial draw animation
-    gsap.fromTo(
-      triangle,
-      { strokeDashoffset: 100 },
-      {
-        strokeDashoffset: 0,
-        duration: 1.5,
-        ease: "power3.out",
-        delay: 0.8,
-      }
-    );
-  }, []);
-
-  return (
-    <svg
-      ref={svgRef}
-      viewBox="0 0 32 32"
-      className="w-8 h-8 md:w-10 md:h-10"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      {/* X shape */}
-      <path
-        d="M6 6L26 26M26 6L6 26"
-        stroke="white"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-      />
-      {/* Accent triangle */}
-      <path
-        className="logo-triangle"
-        d="M16 4L24 16L16 28"
-        stroke="url(#gradient)"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeDasharray="100"
-        strokeDashoffset="100"
-        fill="none"
-      />
-      <defs>
-        <linearGradient id="gradient" x1="16" y1="4" x2="24" y2="28">
-          <stop stopColor="#FF0080" />
-          <stop offset="1" stopColor="#7C3AED" />
-        </linearGradient>
-      </defs>
-    </svg>
   );
 }

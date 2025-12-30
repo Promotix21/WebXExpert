@@ -4,213 +4,304 @@ import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
-import { SplitText } from "@/components/animations/SplitText";
-import { Reveal } from "@/components/animations/Reveal";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-const steps = [
+const processSteps = [
   {
     number: "01",
     title: "Discovery",
-    description:
-      "We dive deep into your business, goals, and target audience. Understanding your vision is the foundation of everything we build.",
+    description: "Understanding your vision, goals, and challenges. We dive deep into your business to craft the perfect solution.",
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6 md:w-8 md:h-8">
-        <circle cx="11" cy="11" r="8" />
-        <path d="M21 21l-4.35-4.35" strokeLinecap="round" />
+      <svg viewBox="0 0 24 24" fill="none" className="w-8 h-8">
+        <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2" />
+        <path d="M21 21L16.65 16.65" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        <circle cx="11" cy="11" r="3" stroke="currentColor" strokeWidth="2" />
       </svg>
     ),
+    color: "pink",
   },
   {
     number: "02",
     title: "Strategy",
-    description:
-      "We architect the technical approach, define the user experience, and plan every feature. No surprises, just clarity.",
+    description: "Planning architecture, tech stack, and roadmap. Every decision is intentional and future-proof.",
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6 md:w-8 md:h-8">
-        <path d="M12 2L2 7l10 5 10-5-10-5z" strokeLinejoin="round" />
-        <path d="M2 17l10 5 10-5M2 12l10 5 10-5" strokeLinecap="round" />
+      <svg viewBox="0 0 24 24" fill="none" className="w-8 h-8">
+        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     ),
+    color: "cyan",
   },
   {
     number: "03",
     title: "Design",
-    description:
-      "Award-worthy visuals and interactions take shape. Every pixel, every animation, every microinteraction crafted with intention.",
+    description: "Crafting the visual experience and interactions. Every pixel is placed with purpose.",
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6 md:w-8 md:h-8">
-        <path d="M12 19l7-7 3 3-7 7-3-3z" />
-        <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" />
-        <path d="M2 2l7.586 7.586" strokeLinecap="round" />
-        <circle cx="11" cy="11" r="2" />
+      <svg viewBox="0 0 24 24" fill="none" className="w-8 h-8">
+        <path d="M12 19L19 12L22 15L15 22L12 19Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M18 13L16.5 5.5L2 2L5.5 16.5L13 18L18 13Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M2 2L9.586 9.586" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="11" cy="11" r="2" stroke="currentColor" strokeWidth="2" />
       </svg>
     ),
+    color: "purple",
   },
   {
     number: "04",
     title: "Develop",
-    description:
-      "Clean, performant code brings designs to life. We build for scale, security, and speed. No shortcuts.",
+    description: "Building it bulletproof with clean, scalable code. Performance and quality are non-negotiable.",
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6 md:w-8 md:h-8">
-        <path d="M8 9l-3 3 3 3M16 9l3 3-3 3M14 4l-4 16" strokeLinecap="round" strokeLinejoin="round" />
+      <svg viewBox="0 0 24 24" fill="none" className="w-8 h-8">
+        <polyline points="16,18 22,12 16,6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <polyline points="8,6 2,12 8,18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <line x1="14" y1="4" x2="10" y2="20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
       </svg>
     ),
+    color: "cyan",
   },
   {
     number: "05",
     title: "Launch",
-    description:
-      "Rigorous testing, deployment, and ongoing support. We don't disappear after launch—we're here for the long haul.",
+    description: "Deployment, testing, and ongoing support. Your success is our success.",
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6 md:w-8 md:h-8">
-        <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" strokeLinejoin="round" />
+      <svg viewBox="0 0 24 24" fill="none" className="w-8 h-8">
+        <path d="M4.5 16.5C3 15 3 12.5 3 11C3 7.5 5.5 4 10 4C14 4 17.5 6 19 8L13 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        <path d="M14.5 4C16 3 18.5 3 20 3C20.5 3 21 3.5 21 4C21 5.5 21 8 20 9.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        <circle cx="10" cy="14" r="3" stroke="currentColor" strokeWidth="2" />
+        <path d="M7 17L3 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
       </svg>
     ),
+    color: "pink",
   },
 ];
 
 export function Process() {
   const sectionRef = useRef<HTMLElement>(null);
-  const timelineRef = useRef<HTMLDivElement>(null);
-  const stepsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const progressRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
-    const timeline = timelineRef.current;
-    if (!section || !timeline) return;
+    const track = trackRef.current;
+    const progress = progressRef.current;
+
+    if (!section || !track || !progress) return;
 
     const ctx = gsap.context(() => {
-      // Animate the progress line
-      gsap.fromTo(
-        timeline,
-        { scaleX: 0 },
-        {
-          scaleX: 1,
-          ease: "none",
-          scrollTrigger: {
-            trigger: section,
-            start: "top 60%",
-            end: "bottom 60%",
-            scrub: 1,
-          },
-        }
-      );
+      // Get the width to scroll
+      const getScrollWidth = () => track.scrollWidth - window.innerWidth;
+
+      // Horizontal scroll animation
+      const scrollTween = gsap.to(track, {
+        x: () => -getScrollWidth(),
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top top",
+          end: () => `+=${getScrollWidth()}`,
+          pin: true,
+          scrub: 1,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      // Progress line animation
+      gsap.to(progress, {
+        width: "100%",
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top top",
+          end: () => `+=${getScrollWidth()}`,
+          scrub: 1,
+        },
+      });
 
       // Animate each step
-      stepsRef.current.forEach((step, i) => {
-        if (!step) return;
-
+      const steps = track.querySelectorAll(".process-step");
+      steps.forEach((step) => {
         gsap.fromTo(
           step,
-          { opacity: 0.3, y: 30 },
+          { opacity: 0.3, scale: 0.9 },
           {
             opacity: 1,
-            y: 0,
+            scale: 1,
             scrollTrigger: {
               trigger: step,
-              start: "top 80%",
-              end: "top 50%",
-              scrub: 1,
+              containerAnimation: scrollTween,
+              start: "left 80%",
+              end: "left 30%",
+              scrub: true,
             },
           }
         );
+
+        // Animate the step number
+        const number = step.querySelector(".step-number");
+        if (number) {
+          gsap.fromTo(
+            number,
+            { scale: 0, rotation: -180 },
+            {
+              scale: 1,
+              rotation: 0,
+              scrollTrigger: {
+                trigger: step,
+                containerAnimation: scrollTween,
+                start: "left 70%",
+                end: "left 40%",
+                scrub: true,
+              },
+            }
+          );
+        }
       });
-    });
+    }, section);
 
     return () => ctx.revert();
   }, []);
 
+  const getColorClasses = (color: string) => {
+    switch (color) {
+      case "pink":
+        return {
+          bg: "bg-brand-pink-500/10",
+          border: "border-brand-pink-500/30",
+          text: "text-brand-pink-500",
+          glow: "hover:shadow-[0_0_40px_rgba(255,0,128,0.2)]",
+        };
+      case "cyan":
+        return {
+          bg: "bg-brand-cyan-500/10",
+          border: "border-brand-cyan-500/30",
+          text: "text-brand-cyan-500",
+          glow: "hover:shadow-[0_0_40px_rgba(0,212,255,0.2)]",
+        };
+      case "purple":
+        return {
+          bg: "bg-brand-purple-500/10",
+          border: "border-brand-purple-500/30",
+          text: "text-brand-purple-500",
+          glow: "hover:shadow-[0_0_40px_rgba(124,58,237,0.2)]",
+        };
+      default:
+        return {
+          bg: "bg-white/5",
+          border: "border-white/10",
+          text: "text-white",
+          glow: "",
+        };
+    }
+  };
+
   return (
     <section
       ref={sectionRef}
-      className="section-padding bg-surface-050 relative overflow-hidden"
+      className="relative bg-black overflow-hidden"
     >
-      <div className="container-main">
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 md:mb-20">
-          <Reveal>
-            <span className="text-sm text-brand-pink-500 font-medium tracking-widest uppercase mb-4 block">
-              Our Process
-            </span>
-          </Reveal>
+      {/* Background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-surface-050 via-black to-black" />
 
-          <SplitText
-            as="h2"
-            className="heading-section mb-6"
-            highlightWords={["Chaos"]}
-            highlightClassName="gradient-text"
-          >
-            From Chaos to Launch
-          </SplitText>
-
-          <Reveal delay={0.4}>
-            <p className="body-large">
-              A battle-tested process refined over 18 years. We turn complex
-              ideas into polished products, on time and on budget.
-            </p>
-          </Reveal>
-        </div>
-
-        {/* Process Timeline */}
-        <div className="relative">
-          {/* Progress Line */}
-          <div className="hidden lg:block absolute top-[60px] left-0 right-0 h-0.5 bg-surface-300">
-            <div
-              ref={timelineRef}
-              className="absolute inset-0 bg-gradient-to-r from-brand-pink-500 via-brand-purple-500 to-brand-cyan-500 origin-left"
-            />
+      {/* Section Header - Fixed at top */}
+      <div className="absolute top-0 left-0 right-0 z-20 pt-8 md:pt-12">
+        <div className="container-main">
+          <div className="flex items-center justify-between">
+            <div>
+              <span className="text-sm text-brand-cyan-500 font-medium tracking-widest uppercase mb-2 block">
+                Our Process
+              </span>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold">
+                How We <span className="gradient-text-cyan">Build</span>
+              </h2>
+            </div>
+            <div className="hidden md:block text-right">
+              <span className="text-sm text-neutral-500">Scroll to explore</span>
+              <div className="flex items-center gap-2 justify-end mt-2">
+                <span className="text-xs text-neutral-600">01</span>
+                <div className="w-24 h-1 bg-surface-300 rounded-full overflow-hidden">
+                  <div
+                    ref={progressRef}
+                    className="h-full w-0 bg-gradient-to-r from-brand-pink-500 via-brand-purple-500 to-brand-cyan-500 rounded-full"
+                  />
+                </div>
+                <span className="text-xs text-neutral-600">05</span>
+              </div>
+            </div>
           </div>
+        </div>
+      </div>
 
-          {/* Steps */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 md:gap-8 lg:gap-4">
-            {steps.map((step, i) => (
+      {/* Horizontal Track */}
+      <div ref={trackRef} className="flex items-center min-h-screen pt-32 pb-20">
+        {/* Initial spacer */}
+        <div className="shrink-0 w-[10vw]" />
+
+        {/* Timeline line */}
+        <div className="absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-surface-300/30 to-transparent pointer-events-none" />
+
+        {/* Steps */}
+        {processSteps.map((step, index) => {
+          const colors = getColorClasses(step.color);
+
+          return (
+            <div
+              key={step.number}
+              className="process-step shrink-0 w-[85vw] md:w-[60vw] lg:w-[40vw] px-4 md:px-8"
+            >
               <div
-                key={step.number}
-                ref={(el) => {
-                  stepsRef.current[i] = el;
-                }}
-                className="relative"
-              >
-                {/* Mobile/Tablet connector line */}
-                {i < steps.length - 1 && (
-                  <div className="lg:hidden absolute left-6 top-14 w-0.5 h-full bg-gradient-to-b from-brand-pink-500 to-transparent opacity-20" />
+                className={cn(
+                  "relative p-8 md:p-10 rounded-3xl border backdrop-blur-sm transition-all duration-500 group",
+                  colors.bg,
+                  colors.border,
+                  "hover:scale-[1.02]",
+                  colors.glow
                 )}
-
-                {/* Step card */}
+              >
+                {/* Step number badge */}
                 <div
                   className={cn(
-                    "relative bg-surface-100 rounded-2xl p-5 md:p-6 border border-surface-300/50",
-                    "hover:border-brand-pink-500/50 transition-colors duration-300"
+                    "step-number absolute -top-6 -left-2 w-14 h-14 rounded-2xl flex items-center justify-center text-xl font-bold",
+                    "bg-black border-2",
+                    colors.border,
+                    colors.text
                   )}
                 >
-                  {/* Number badge */}
-                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-surface-200 flex items-center justify-center mb-4 md:mb-6 text-brand-pink-500 font-bold text-sm md:text-base">
-                    {step.number}
-                  </div>
-
-                  {/* Connector dot for desktop */}
-                  <div className="hidden lg:block absolute -top-3 left-1/2 -translate-x-1/2 w-4 h-4 md:w-6 md:h-6 rounded-full bg-surface-050 border-2 border-brand-pink-500">
-                    <div className="absolute inset-1 md:inset-1.5 rounded-full bg-brand-pink-500" />
-                  </div>
-
-                  <div className="flex items-center gap-3 mb-3 md:mb-4">
-                    <div className="text-neutral-400">{step.icon}</div>
-                    <h3 className="text-lg md:text-xl font-bold">{step.title}</h3>
-                  </div>
-
-                  <p className="text-xs md:text-sm text-neutral-500 leading-relaxed">
-                    {step.description}
-                  </p>
+                  {step.number}
                 </div>
+
+                {/* Icon */}
+                <div className={cn("mb-6", colors.text)}>{step.icon}</div>
+
+                {/* Content */}
+                <h3 className="text-2xl md:text-3xl font-bold mb-4">
+                  {step.title}
+                </h3>
+                <p className="text-neutral-400 leading-relaxed text-sm md:text-base">
+                  {step.description}
+                </p>
+
+                {/* Connector dots */}
+                {index < processSteps.length - 1 && (
+                  <div className="absolute top-1/2 -right-4 flex items-center gap-2">
+                    <div className={cn("w-2 h-2 rounded-full", colors.bg)} />
+                    <div className="w-1 h-1 rounded-full bg-surface-300/50" />
+                    <div className="w-1 h-1 rounded-full bg-surface-300/30" />
+                  </div>
+                )}
+
+                {/* Decorative corner accents */}
+                <div className={cn("absolute top-4 right-4 w-8 h-8 border-t-2 border-r-2 rounded-tr-lg opacity-30", colors.border)} />
+                <div className={cn("absolute bottom-4 left-4 w-8 h-8 border-b-2 border-l-2 rounded-bl-lg opacity-30", colors.border)} />
               </div>
-            ))}
-          </div>
-        </div>
+            </div>
+          );
+        })}
+
+        {/* End spacer */}
+        <div className="shrink-0 w-[30vw]" />
       </div>
     </section>
   );
