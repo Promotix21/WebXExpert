@@ -216,7 +216,13 @@ export async function POST(request: NextRequest) {
     const MAX_HISTORY = 6;
     const recentMessages = parsed.data.messages.slice(-MAX_HISTORY);
 
-    const history = recentMessages.slice(0, -1).map((msg) => ({
+    // Gemini history must start with a "user" turn — strip any leading assistant messages
+    // (the frontend injects a welcome message as the first assistant turn)
+    const historyMessages = recentMessages.slice(0, -1);
+    const firstUserIndex = historyMessages.findIndex((m) => m.role === "user");
+    const trimmedHistory = firstUserIndex === -1 ? [] : historyMessages.slice(firstUserIndex);
+
+    const history = trimmedHistory.map((msg) => ({
       role: msg.role === "assistant" ? "model" : "user",
       parts: [{ text: msg.content }],
     }));
