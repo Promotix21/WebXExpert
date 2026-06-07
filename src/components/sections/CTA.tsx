@@ -16,7 +16,7 @@ export function CTA() {
     name: "",
     email: "",
     company: "",
-    budget: "",
+    service: "",
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -96,17 +96,25 @@ export function CTA() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-
-    // Reset after showing success
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormData({ name: "", email: "", company: "", budget: "", message: "" });
-    }, 3000);
+      if (response.ok) {
+        setIsSubmitted(true);
+        setTimeout(() => {
+          setIsSubmitted(false);
+          setFormData({ name: "", email: "", company: "", service: "", message: "" });
+        }, 3000);
+      }
+    } catch {
+      // silent — user sees no change, can retry
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (
@@ -245,21 +253,23 @@ export function CTA() {
                       />
                     </div>
                     <div>
-                      <label htmlFor="budget" className="block text-sm font-medium text-neutral-300 mb-2">
-                        Budget Range
+                      <label htmlFor="service" className="block text-sm font-medium text-neutral-300 mb-2">
+                        Service Needed
                       </label>
                       <select
-                        id="budget"
-                        name="budget"
-                        value={formData.budget}
+                        id="service"
+                        name="service"
+                        value={formData.service}
                         onChange={handleChange}
                         className="w-full px-4 py-3 bg-surface-200/50 border border-surface-300/50 rounded-xl text-white focus:outline-none focus:border-brand-cyan-500 focus:ring-1 focus:ring-brand-cyan-500 transition-all duration-300"
                       >
                         <option value="" className="bg-surface-200">Select...</option>
-                        <option value="5k-10k" className="bg-surface-200">$5K - $10K</option>
-                        <option value="10k-25k" className="bg-surface-200">$10K - $25K</option>
-                        <option value="25k-50k" className="bg-surface-200">$25K - $50K</option>
-                        <option value="50k+" className="bg-surface-200">$50K+</option>
+                        <option value="Web Design" className="bg-surface-200">Web Design</option>
+                        <option value="Web Development" className="bg-surface-200">Web Development</option>
+                        <option value="Custom Software" className="bg-surface-200">Custom Software</option>
+                        <option value="CRM Development" className="bg-surface-200">CRM Development</option>
+                        <option value="API Integrations" className="bg-surface-200">API Integrations</option>
+                        <option value="Consulting" className="bg-surface-200">Consulting</option>
                       </select>
                     </div>
                   </div>

@@ -23,14 +23,6 @@ const services = [
   "Consulting",
 ];
 
-const budgets = [
-  "$5K - $10K",
-  "$10K - $25K",
-  "$25K - $50K",
-  "$50K - $100K",
-  "$100K+",
-];
-
 const contactInfo = [
   {
     icon: "📧",
@@ -59,7 +51,6 @@ export default function ContactPage() {
     email: "",
     company: "",
     service: "",
-    budget: "",
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -129,7 +120,6 @@ export default function ContactPage() {
           email: "",
           company: "",
           service: "",
-          budget: "",
           message: "",
         });
       } else {
@@ -252,52 +242,28 @@ export default function ContactPage() {
                     />
                   </div>
 
-                  {/* Service & Budget Row */}
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="form-field">
-                      <label
-                        htmlFor="service"
-                        className="block text-sm font-medium mb-2"
-                      >
-                        Service Interested In
-                      </label>
-                      <select
-                        id="service"
-                        name="service"
-                        value={formState.service}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 bg-surface-100/50 border border-surface-300/30 rounded-xl focus:border-brand-cyan-500 focus:ring-1 focus:ring-brand-cyan-500 outline-none transition-all duration-200 appearance-none cursor-pointer"
-                      >
-                        <option value="">Select a service</option>
-                        {services.map((service) => (
-                          <option key={service} value={service}>
-                            {service}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className="form-field">
-                      <label
-                        htmlFor="budget"
-                        className="block text-sm font-medium mb-2"
-                      >
-                        Project Budget
-                      </label>
-                      <select
-                        id="budget"
-                        name="budget"
-                        value={formState.budget}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 bg-surface-100/50 border border-surface-300/30 rounded-xl focus:border-brand-cyan-500 focus:ring-1 focus:ring-brand-cyan-500 outline-none transition-all duration-200 appearance-none cursor-pointer"
-                      >
-                        <option value="">Select budget range</option>
-                        {budgets.map((budget) => (
-                          <option key={budget} value={budget}>
-                            {budget}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                  {/* Service Needed */}
+                  <div className="form-field">
+                    <label
+                      htmlFor="service"
+                      className="block text-sm font-medium mb-2"
+                    >
+                      What Kind of Service Do You Need?
+                    </label>
+                    <select
+                      id="service"
+                      name="service"
+                      value={formState.service}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 bg-surface-100/50 border border-surface-300/30 rounded-xl focus:border-brand-cyan-500 focus:ring-1 focus:ring-brand-cyan-500 outline-none transition-all duration-200 appearance-none cursor-pointer"
+                    >
+                      <option value="">Select a service</option>
+                      {services.map((service) => (
+                        <option key={service} value={service}>
+                          {service}
+                        </option>
+                      ))}
+                    </select>
                   </div>
 
                   {/* Message */}
