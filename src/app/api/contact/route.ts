@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 
+// Lazy — instantiated at request time so build doesn't need the env var
+let _resend: Resend | null = null;
+const getResend = () => {
+  if (!_resend) _resend = new Resend(process.env.RESEND_API_KEY!);
+  return _resend;
+};
+
 interface ContactFormData {
   name: string;
   email: string;
@@ -9,8 +16,6 @@ interface ContactFormData {
   budget?: string;
   message: string;
 }
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "hello@webxexpert.com";
 const FROM_NAME = process.env.RESEND_FROM_NAME || "WebXExpert";
@@ -169,7 +174,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Send notification to WebXExpert team
-    await resend.emails.send({
+    await getResend().emails.send({
       from: `${FROM_NAME} <${FROM_EMAIL}>`,
       to: [TO_EMAIL],
       replyTo: data.email,
@@ -178,7 +183,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Send confirmation to the visitor
-    await resend.emails.send({
+    await getResend().emails.send({
       from: `${FROM_NAME} <${FROM_EMAIL}>`,
       to: [data.email],
       subject: "Thank you for contacting WebXExpert",
