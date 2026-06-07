@@ -30,8 +30,9 @@ export function Chatbot() {
   }, [isOpen, messages]);
 
   const sendMessage = async () => {
+    // 1. Frontend validation
     const trimmed = input.trim();
-    if (!trimmed || isLoading) return;
+    if (!trimmed || isLoading || trimmed.length > 500) return;
 
     const userMessage: Message = { role: "user", content: trimmed };
     const updatedMessages = [...messages, userMessage];
@@ -43,20 +44,33 @@ export function Chatbot() {
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: updatedMessages }),
+        // Slice frontend history just in case, though backend also truncates
+        body: JSON.stringify({ messages: updatedMessages.slice(-20) }),
       });
 
       const data = await response.json();
+      
+      // 2. Handle HTTP 429 Rate Limiting Gracefully
+      if (response.status === 429) {
+        setMessages((prev) => [...prev, { 
+          role: "assistant", 
+          content: "You're sending messages too fast! Please wait a minute and try again." 
+        }]);
+        return;
+      }
+
       const assistantMessage: Message = {
         role: "assistant",
-        content: data.reply || data.error || "Sorry, I couldn't process that. Please try again.",
+        content: data.reply || data.error || "Sorry, I couldn't process that. Please email hello@webxexpert.com.",
       };
+      
       setMessages((prev) => [...prev, assistantMessage]);
       if (!isOpen) setHasUnread(true);
+      
     } catch {
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: "Something went wrong. Please try again or email us at hello@webxexpert.com" },
+        { role: "assistant", content: "Network error. Please try again or email us at hello@webxexpert.com" },
       ]);
     } finally {
       setIsLoading(false);
@@ -72,7 +86,6 @@ export function Chatbot() {
 
   return (
     <>
-      {/* Chat window */}
       {isOpen && (
         <div
           className="fixed bottom-24 right-6 z-[9998] w-[360px] max-w-[calc(100vw-24px)] flex flex-col"
@@ -85,7 +98,6 @@ export function Chatbot() {
             overflow: "hidden",
           }}
         >
-          {/* Header */}
           <div
             style={{
               background: "linear-gradient(135deg, #00D4FF 0%, #7C3AED 100%)",
@@ -139,7 +151,6 @@ export function Chatbot() {
             </button>
           </div>
 
-          {/* Messages */}
           <div
             style={{
               flex: 1,
@@ -247,7 +258,6 @@ export function Chatbot() {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input */}
           <div
             style={{
               padding: "12px 16px",
@@ -262,8 +272,10 @@ export function Chatbot() {
               ref={inputRef}
               type="text"
               value={input}
+              maxLength={500} // SECURE: Hard cap on input string length
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
+              disabled={isLoading}
               placeholder="Ask about our services..."
               style={{
                 flex: 1,
@@ -279,7 +291,7 @@ export function Chatbot() {
             />
             <button
               onClick={sendMessage}
-              disabled={isLoading || !input.trim()}
+              disabled={isLoading || !input.trim() || input.length > 500}
               style={{
                 width: 40,
                 height: 40,
@@ -306,7 +318,6 @@ export function Chatbot() {
         </div>
       )}
 
-      {/* Toggle button */}
       <button
         onClick={() => setIsOpen((prev) => !prev)}
         aria-label={isOpen ? "Close chat" : "Open chat"}
@@ -350,7 +361,6 @@ export function Chatbot() {
           </svg>
         )}
 
-        {/* Unread badge */}
         {hasUnread && !isOpen && (
           <div
             style={{
