@@ -25,7 +25,7 @@ const categories = [
 const projects = [
   {
     id: "real-estate-crm",
-    title: "PropVista CRM",
+    title: "PROPIX",
     category: "CRM",
     description:
       "Complete real estate CRM with lead capture, EMI calculator, WhatsApp automation, and Facebook Ads integration. Processes 10,000+ leads monthly.",

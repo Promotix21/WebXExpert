@@ -3,7 +3,6 @@
 import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Image from "next/image";
 import Link from "next/link";
 import { InnerHeader } from "@/components/layout/InnerHeader";
 import { PageHeader } from "@/components/layout/PageHeader";
@@ -55,40 +54,14 @@ const values = [
 
 const team = [
   {
-    name: "Alex Chen",
+    name: "Rajesh Kumar",
     role: "Founder & CEO",
-    bio: "Former tech lead at a Fortune 500. 15+ years building products that scale.",
-    image: "/images/team/alex.jpg",
-  },
-  {
-    name: "Sarah Johnson",
-    role: "Creative Director",
-    bio: "Awwwards-winning designer. Obsessed with motion and micro-interactions.",
-    image: "/images/team/sarah.jpg",
-  },
-  {
-    name: "Marcus Rodriguez",
-    role: "Lead Engineer",
-    bio: "Full-stack wizard. Built systems handling millions of requests.",
-    image: "/images/team/marcus.jpg",
-  },
-  {
-    name: "Emily Park",
-    role: "Head of Product",
-    bio: "Product strategist who turns complex problems into elegant solutions.",
-    image: "/images/team/emily.jpg",
-  },
-  {
-    name: "David Kim",
-    role: "Senior Developer",
-    bio: "React & Node.js expert. Open source contributor and tech blogger.",
-    image: "/images/team/david.jpg",
-  },
-  {
-    name: "Lisa Wang",
-    role: "UX Designer",
-    bio: "User research advocate. Makes complex apps feel simple.",
-    image: "/images/team/lisa.jpg",
+    bio: "Full-stack developer and digital strategist with deep expertise in web design, custom software, and CRM development. Building premium digital experiences that drive real business results.",
+    image: "",
+    socials: {
+      email: "hello@webxexpert.com",
+      phone: "+91 8789389941",
+    },
   },
 ];
 
@@ -306,53 +279,79 @@ export default function AboutPage() {
           <div className="container-main">
             <div className="text-center max-w-3xl mx-auto mb-16">
               <span className="text-sm text-brand-purple-500 font-semibold tracking-widest uppercase mb-4 block">
-                The Team
+                The Founder
               </span>
               <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                Meet the{" "}
+                The Person{" "}
                 <span className="bg-gradient-to-r from-brand-cyan-500 to-brand-purple-500 bg-clip-text text-transparent">
-                  Craftspeople
+                  Behind It All
                 </span>
               </h2>
               <p className="text-lg text-neutral-400">
-                A diverse team of experts united by a shared passion for building
-                exceptional digital products.
+                WebXExpert is founder-led — every project gets my direct attention,
+                expertise, and commitment to excellence.
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="flex justify-center">
               {team.map((member, i) => (
                 <div
                   key={i}
-                  className="team-card group rounded-2xl overflow-hidden bg-surface-100/50 border border-surface-300/30 hover:border-brand-purple-500/30 transition-all duration-300"
+                  className="team-card group w-full max-w-sm rounded-3xl overflow-hidden bg-surface-100/50 border border-surface-300/30 hover:border-brand-purple-500/50 transition-all duration-500 hover:shadow-[0_0_60px_rgba(124,58,237,0.15)]"
                 >
-                  {/* Avatar Placeholder */}
-                  <div className="relative aspect-square bg-surface-200/50">
+                  {/* Avatar */}
+                  <div className="relative aspect-square bg-surface-200/50 overflow-hidden">
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-24 h-24 rounded-full bg-gradient-to-br from-brand-cyan-500/30 to-brand-purple-500/30 flex items-center justify-center">
-                        <span className="text-3xl font-bold text-white/50">
-                          {member.name
-                            .split(" ")
-                            .map((n) => n[0])
-                            .join("")}
+                      <div
+                        className="w-32 h-32 rounded-full flex items-center justify-center"
+                        style={{
+                          background: "linear-gradient(135deg, rgba(0,212,255,0.2) 0%, rgba(124,58,237,0.2) 100%)",
+                          border: "2px solid rgba(0,212,255,0.3)",
+                        }}
+                      >
+                        <span className="text-5xl font-black text-white/70 tracking-tight">
+                          RK
                         </span>
                       </div>
                     </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
-                    <p className="absolute bottom-2 left-0 right-0 text-center text-[10px] text-neutral-600">
-                      Add: {member.image}
-                    </p>
+                    {/* Decorative glow */}
+                    <div className="absolute inset-0 opacity-40" style={{ background: "radial-gradient(circle at 50% 50%, rgba(124,58,237,0.3) 0%, transparent 70%)" }} />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
+                    {/* Founder badge */}
+                    <div className="absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-semibold bg-brand-cyan-500 text-black">
+                      Founder
+                    </div>
                   </div>
 
                   {/* Info */}
-                  <div className="p-6">
-                    <h3 className="text-lg font-bold group-hover:text-brand-purple-500 transition-colors">
+                  <div className="p-8">
+                    <h3 className="text-2xl font-bold mb-1 group-hover:text-brand-purple-500 transition-colors">
                       {member.name}
                     </h3>
-                    <p className="text-sm text-brand-cyan-500 mb-3">
+                    <p className="text-brand-cyan-500 font-medium mb-4">
                       {member.role}
                     </p>
-                    <p className="text-sm text-neutral-500">{member.bio}</p>
+                    <p className="text-neutral-400 leading-relaxed mb-6">
+                      {member.bio}
+                    </p>
+
+                    {/* Contact links */}
+                    <div className="flex flex-col gap-2 pt-6 border-t border-surface-300/20">
+                      <a
+                        href={`mailto:${member.socials.email}`}
+                        className="flex items-center gap-3 text-sm text-neutral-400 hover:text-brand-cyan-500 transition-colors"
+                      >
+                        <span className="text-lg">📧</span>
+                        {member.socials.email}
+                      </a>
+                      <a
+                        href={`tel:${member.socials.phone.replace(/\s/g, "")}`}
+                        className="flex items-center gap-3 text-sm text-neutral-400 hover:text-brand-cyan-500 transition-colors"
+                      >
+                        <span className="text-lg">📱</span>
+                        {member.socials.phone}
+                      </a>
+                    </div>
                   </div>
                 </div>
               ))}
