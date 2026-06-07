@@ -42,7 +42,22 @@ if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) 
 
 // In-memory fallback (single-instance only — Upstash is always preferred)
 const localMap = new Map<string, { count: number; expires: number }>();
+
+function cleanupLocalMap() {
+  const now = Date.now();
+  for (const [key, record] of localMap.entries()) {
+    if (record.expires < now) {
+      localMap.delete(key);
+    }
+  }
+  // Hard limit to prevent OOM
+  if (localMap.size > 1000) {
+    localMap.clear();
+  }
+}
+
 function checkLocalRateLimit(ip: string, max: number, windowMs: number): boolean {
+  cleanupLocalMap();
   const now = Date.now();
   const key = `${ip}_${windowMs}`;
   const record = localMap.get(key);
@@ -263,7 +278,7 @@ export async function POST(request: NextRequest) {
           const lead = leadParsed.data;
           try {
             await resend.emails.send({
-              from: process.env.RESEND_FROM_EMAIL || "leads@resend.dev",
+              from: process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev",
               to: process.env.RESEND_TO_EMAIL || "hello@webxexpert.com",
               subject: `New Lead: ${lead.name || lead.email}`,
               text: [
