@@ -9,7 +9,7 @@ interface Message {
 
 const WELCOME_MESSAGE: Message = {
   role: "assistant",
-  content: "Hi! I'm the WebXExpert assistant. Ask me anything about our services, process, or how we can help build your next project! 🚀",
+  content: "Hi! 👋 I'm the WebXExpert assistant.\n\nI can help you with:\n• Our services & pricing\n• Project timelines\n• Getting a quote\n• Connecting you with Rajesh\n\nWhat can I help you with today?",
 };
 
 export function Chatbot() {
@@ -112,10 +112,10 @@ export function Chatbot() {
                 ✦
               </div>
               <div>
-                <p style={{ color: "#fff", fontWeight: 700, fontSize: 14, margin: 0 }}>WebXExpert AI</p>
+                <p style={{ color: "#fff", fontWeight: 700, fontSize: 14, margin: 0 }}>WebXExpert Assistant</p>
                 <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
                   <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#4ade80" }} />
-                  <p style={{ color: "rgba(255,255,255,0.8)", fontSize: 11, margin: 0 }}>Online</p>
+                  <p style={{ color: "rgba(255,255,255,0.8)", fontSize: 11, margin: 0 }}>Ask about our services</p>
                 </div>
               </div>
             </div>
@@ -264,7 +264,7 @@ export function Chatbot() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Ask me anything..."
+              placeholder="Ask about our services..."
               style={{
                 flex: 1,
                 background: "rgba(255,255,255,0.06)",
