@@ -47,7 +47,7 @@ const contactInfo = [
   {
     icon: "📍",
     label: "Office",
-    value: "San Francisco, CA",
+    value: "Jamshedpur, India",
     href: "#",
   },
 ];
