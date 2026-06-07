@@ -11,9 +11,9 @@ const getResend = () => {
 interface ContactFormData {
   name: string;
   email: string;
+  phone?: string;
   company?: string;
   service?: string;
-  budget?: string;
   message: string;
 }
 
@@ -51,23 +51,21 @@ const generateEmailHTML = (data: ContactFormData) => `
                   <a href="mailto:${data.email}" style="color:#00D4FF;text-decoration:none;">${data.email}</a>
                 </p>
               </div>
+              ${data.phone ? `
+              <div style="margin-bottom:24px;">
+                <p style="color:#888;font-size:12px;text-transform:uppercase;margin:0 0 8px 0;letter-spacing:1px;">Phone</p>
+                <p style="color:#fff;font-size:16px;margin:0;">${data.phone}</p>
+              </div>` : ""}
               ${data.company ? `
               <div style="margin-bottom:24px;">
                 <p style="color:#888;font-size:12px;text-transform:uppercase;margin:0 0 8px 0;letter-spacing:1px;">Company</p>
                 <p style="color:#fff;font-size:16px;margin:0;">${data.company}</p>
               </div>` : ""}
-              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
-                <tr>
-                  ${data.service ? `<td width="50%" style="vertical-align:top;">
-                    <p style="color:#888;font-size:12px;text-transform:uppercase;margin:0 0 8px 0;letter-spacing:1px;">Service</p>
-                    <p style="color:#fff;font-size:16px;margin:0;">${data.service}</p>
-                  </td>` : ""}
-                  ${data.budget ? `<td width="50%" style="vertical-align:top;">
-                    <p style="color:#888;font-size:12px;text-transform:uppercase;margin:0 0 8px 0;letter-spacing:1px;">Budget</p>
-                    <p style="color:#00D4FF;font-size:16px;margin:0;font-weight:600;">${data.budget}</p>
-                  </td>` : ""}
-                </tr>
-              </table>
+              ${data.service ? `
+              <div style="margin-bottom:24px;">
+                <p style="color:#888;font-size:12px;text-transform:uppercase;margin:0 0 8px 0;letter-spacing:1px;">Service Needed</p>
+                <p style="color:#fff;font-size:16px;margin:0;">${data.service}</p>
+              </div>` : ""}
               <div style="margin-bottom:24px;">
                 <p style="color:#888;font-size:12px;text-transform:uppercase;margin:0 0 8px 0;letter-spacing:1px;">Message</p>
                 <div style="background-color:#1a1a1a;border-radius:12px;padding:20px;border-left:3px solid #00D4FF;">

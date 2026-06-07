@@ -49,6 +49,7 @@ export default function ContactPage() {
   const [formState, setFormState] = useState({
     name: "",
     email: "",
+    phone: "",
     company: "",
     service: "",
     message: "",
@@ -118,6 +119,7 @@ export default function ContactPage() {
         setFormState({
           name: "",
           email: "",
+          phone: "",
           company: "",
           service: "",
           message: "",
@@ -223,13 +225,31 @@ export default function ContactPage() {
                     </div>
                   </div>
 
-                  {/* Company */}
-                  <div className="form-field">
-                    <label
-                      htmlFor="company"
-                      className="block text-sm font-medium mb-2"
-                    >
-                      Company Name
+                  {/* Phone & Company Row */}
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="form-field">
+                      <label
+                        htmlFor="phone"
+                        className="block text-sm font-medium mb-2"
+                      >
+                        Phone Number
+                      </label>
+                      <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        value={formState.phone}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 bg-surface-100/50 border border-surface-300/30 rounded-xl focus:border-brand-cyan-500 focus:ring-1 focus:ring-brand-cyan-500 outline-none transition-all duration-200"
+                        placeholder="+91 98765 43210"
+                      />
+                    </div>
+                    <div className="form-field">
+                      <label
+                        htmlFor="company"
+                        className="block text-sm font-medium mb-2"
+                      >
+                        Company Name
                     </label>
                     <input
                       type="text"
@@ -240,6 +260,7 @@ export default function ContactPage() {
                       className="w-full px-4 py-3 bg-surface-100/50 border border-surface-300/30 rounded-xl focus:border-brand-cyan-500 focus:ring-1 focus:ring-brand-cyan-500 outline-none transition-all duration-200"
                       placeholder="Acme Inc."
                     />
+                    </div>
                   </div>
 
                   {/* Service Needed */}

@@ -15,6 +15,7 @@ export function CTA() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
     company: "",
     service: "",
     message: "",
@@ -107,7 +108,7 @@ export function CTA() {
         setIsSubmitted(true);
         setTimeout(() => {
           setIsSubmitted(false);
-          setFormData({ name: "", email: "", company: "", service: "", message: "" });
+          setFormData({ name: "", email: "", phone: "", company: "", service: "", message: "" });
         }, 3000);
       }
     } catch {
@@ -239,17 +240,17 @@ export function CTA() {
 
                   <div className="form-field grid grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="company" className="block text-sm font-medium text-neutral-300 mb-2">
-                        Company
+                      <label htmlFor="phone" className="block text-sm font-medium text-neutral-300 mb-2">
+                        Phone Number
                       </label>
                       <input
-                        type="text"
-                        id="company"
-                        name="company"
-                        value={formData.company}
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        value={formData.phone}
                         onChange={handleChange}
                         className="w-full px-4 py-3 bg-surface-200/50 border border-surface-300/50 rounded-xl text-white placeholder-neutral-500 focus:outline-none focus:border-brand-cyan-500 focus:ring-1 focus:ring-brand-cyan-500 transition-all duration-300"
-                        placeholder="Company Inc."
+                        placeholder="+91 98765 43210"
                       />
                     </div>
                     <div>
