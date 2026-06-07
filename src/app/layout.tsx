@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "@/styles/globals.css";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { CustomCursor } from "@/components/ui/CustomCursor";
+import { Chatbot } from "@/components/ui/Chatbot";
 import { OrganizationSchema, WebsiteSchema } from "@/components/seo/JsonLd";
 
 // Use local fonts with fallback
@@ -155,6 +156,7 @@ export default function RootLayout({
       >
         <CustomCursor />
         <SmoothScroll>{children}</SmoothScroll>
+        <Chatbot />
       </body>
     </html>
   );

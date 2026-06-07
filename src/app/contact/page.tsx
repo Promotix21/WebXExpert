@@ -41,8 +41,8 @@ const contactInfo = [
   {
     icon: "📱",
     label: "Phone",
-    value: "+1 (555) 123-4567",
-    href: "tel:+15551234567",
+    value: "+91 8789389941",
+    href: "tel:+918789389941",
   },
   {
     icon: "📍",
