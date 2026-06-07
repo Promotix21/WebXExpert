@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 import { Resend } from "resend";
 import { z } from "zod";
 import { Ratelimit } from "@upstash/ratelimit";
@@ -9,43 +9,69 @@ import { Redis } from "@upstash/redis";
 // 1. SECURITY & CONFIGURATION
 // ============================================================================
 
-// Initialize Resend
 const resend = new Resend(process.env.RESEND_API_KEY || "re_dummy");
 
-// Initialize Rate Limiter (Upstash Redis)
-let ratelimit: Ratelimit | null = null;
+// Allowed origins — blocks calls from external sites/scripts
+const ALLOWED_ORIGINS = [
+  "https://webxexpert.com",
+  "https://www.webxexpert.com",
+  ...(process.env.NODE_ENV === "development" ? ["http://localhost:3000"] : []),
+];
+
+// Two rate limiters: per-minute burst + per-day total
+let ratelimitMinute: Ratelimit | null = null;
+let ratelimitDaily: Ratelimit | null = null;
+
 if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
-  ratelimit = new Ratelimit({
-    redis: Redis.fromEnv(),
-    limiter: Ratelimit.slidingWindow(10, "1 m"), // 10 requests per minute
+  const redis = Redis.fromEnv();
+  ratelimitMinute = new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(10, "1 m"),
+    prefix: "chat_minute",
+    analytics: true,
+  });
+  ratelimitDaily = new Ratelimit({
+    redis,
+    limiter: Ratelimit.fixedWindow(50, "24 h"),
+    prefix: "chat_daily",
     analytics: true,
   });
 } else {
-  console.warn("WARNING: Upstash Redis not configured. Using local memory fallback for rate limiting.");
+  console.warn("WARNING: Upstash Redis not configured. Using in-memory fallback.");
 }
 
-// Local memory fallback for Rate Limiting (Single-instance only)
-const localRateLimitMap = new Map<string, { count: number; expires: number }>();
-function checkLocalRateLimit(ip: string): boolean {
+// In-memory fallback (single-instance only — Upstash is always preferred)
+const localMap = new Map<string, { count: number; expires: number }>();
+function checkLocalRateLimit(ip: string, max: number, windowMs: number): boolean {
   const now = Date.now();
-  const record = localRateLimitMap.get(ip);
+  const key = `${ip}_${windowMs}`;
+  const record = localMap.get(key);
   if (!record || record.expires < now) {
-    localRateLimitMap.set(ip, { count: 1, expires: now + 60000 });
+    localMap.set(key, { count: 1, expires: now + windowMs });
     return true;
   }
-  if (record.count >= 10) return false;
+  if (record.count >= max) return false;
   record.count++;
   return true;
 }
 
-// Zod Schema for Strict Input Validation
+// FIX #1: Correct IP extraction — x-real-ip is set by Vercel and cannot be spoofed.
+// x-forwarded-for leftmost entry CAN be spoofed by the client.
+function getClientIp(req: NextRequest): string {
+  return (
+    req.headers.get("x-real-ip") ??
+    req.headers.get("x-forwarded-for")?.split(",").at(-1)?.trim() ??
+    "127.0.0.1"
+  );
+}
+
 const ChatRequestSchema = z.object({
   messages: z.array(
     z.object({
       role: z.enum(["user", "assistant"]),
-      content: z.string().min(1).max(500, "Message exceeds 500 characters."),
+      content: z.string().min(1).max(500),
     })
-  ).max(20, "Conversation history too long."), // Reject massive payloads
+  ).min(1).max(20),
 });
 
 // ============================================================================
@@ -55,7 +81,7 @@ const ChatRequestSchema = z.object({
 const SYSTEM_PROMPT = `
 <system_instructions>
   <role>You are the WebXExpert Virtual Assistant. You represent Rajesh Kumar's web design & development agency based in Jamshedpur, India.</role>
-  
+
   <primary_directive>
     Your ONLY purposes are to:
     1. Discuss WebXExpert's services, portfolio, pricing, timelines, and process.
@@ -95,22 +121,24 @@ const SYSTEM_PROMPT = `
 // 3. GEMINI TOOLS (FUNCTION CALLING)
 // ============================================================================
 
-const tools = [
+// The Gemini SDK's Schema union type doesn't narrow correctly for scalar leaf properties.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const tools: any[] = [
   {
     functionDeclarations: [
       {
         name: "submitLead",
         description: "Saves a new lead to the WebXExpert database and sends an email to Rajesh. Call this strictly when the user provides contact details for a project.",
         parameters: {
-          type: "OBJECT" as any,
+          type: SchemaType.OBJECT,
           properties: {
-            name: { type: "STRING" as any, description: "Lead's full name" },
-            email: { type: "STRING" as any, description: "Lead's email address" },
-            phone: { type: "STRING" as any, description: "Lead's phone number" },
-            company: { type: "STRING" as any, description: "Lead's company name" },
-            projectDetails: { type: "STRING" as any, description: "Description of what they want built" },
-            budget: { type: "STRING" as any, description: "Their stated budget" },
-            timeline: { type: "STRING" as any, description: "Their desired timeline" },
+            name: { type: SchemaType.STRING, description: "Lead's full name" },
+            email: { type: SchemaType.STRING, description: "Lead's email address" },
+            phone: { type: SchemaType.STRING, description: "Lead's phone number" },
+            company: { type: SchemaType.STRING, description: "Lead's company name" },
+            projectDetails: { type: SchemaType.STRING, description: "Description of what they want built" },
+            budget: { type: SchemaType.STRING, description: "Their stated budget" },
+            timeline: { type: SchemaType.STRING, description: "Their desired timeline" },
           },
           required: ["email", "projectDetails"],
         },
@@ -119,129 +147,158 @@ const tools = [
   },
 ];
 
+// FIX #6: Validate Gemini function args before using them
+const LeadSchema = z.object({
+  name: z.string().max(200).optional(),
+  email: z.string().email().max(200),
+  phone: z.string().max(50).optional(),
+  company: z.string().max(200).optional(),
+  projectDetails: z.string().max(2000),
+  budget: z.string().max(100).optional(),
+  timeline: z.string().max(100).optional(),
+});
+
 // ============================================================================
 // 4. MAIN API HANDLER
 // ============================================================================
 
 export async function POST(request: NextRequest) {
   try {
-    // 1. IP Rate Limiting
-    const ip = request.headers.get("x-forwarded-for") || "127.0.0.1";
-    let isAllowed = true;
-    
-    if (ratelimit) {
-      const { success } = await ratelimit.limit(ip);
-      isAllowed = success;
+    // FIX #4: Block requests from unknown origins
+    const origin = request.headers.get("origin");
+    if (origin && !ALLOWED_ORIGINS.includes(origin)) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
+    // FIX #1: Use tamper-proof IP
+    const ip = getClientIp(request);
+
+    // FIX #2: Check per-minute AND daily limits
+    if (ratelimitMinute && ratelimitDaily) {
+      const [minute, daily] = await Promise.all([
+        ratelimitMinute.limit(ip),
+        ratelimitDaily.limit(ip),
+      ]);
+      if (!minute.success) {
+        return NextResponse.json(
+          { error: "Too many requests. Please wait a minute and try again." },
+          { status: 429 }
+        );
+      }
+      if (!daily.success) {
+        return NextResponse.json(
+          { error: "Daily message limit reached. Please contact us at hello@webxexpert.com." },
+          { status: 429 }
+        );
+      }
     } else {
-      isAllowed = checkLocalRateLimit(ip);
+      // In-memory fallback: 10/min and 50/day
+      if (!checkLocalRateLimit(ip, 10, 60_000) || !checkLocalRateLimit(ip, 50, 86_400_000)) {
+        return NextResponse.json(
+          { error: "Too many requests. Please try again later." },
+          { status: 429 }
+        );
+      }
     }
 
-    if (!isAllowed) {
-      return NextResponse.json(
-        { error: "Too many requests. Please try again in a minute." },
-        { status: 429 }
-      );
-    }
-
-    // 2. Input Validation
+    // FIX #3: Validate input — do NOT expose field-level errors to the client
     const body = await request.json();
-    const parsedData = ChatRequestSchema.safeParse(body);
-    
-    if (!parsedData.success) {
-      return NextResponse.json(
-        { error: "Invalid request payload.", details: parsedData.error.flatten().fieldErrors },
-        { status: 400 }
-      );
+    const parsed = ChatRequestSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json({ error: "Invalid request." }, { status: 400 });
     }
 
     if (!process.env.GEMINI_API_KEY) {
       return NextResponse.json({ error: "Service unavailable." }, { status: 503 });
     }
 
-    // 3. Context Bloat Protection (Keep only last 6 messages + the new one)
+    // Keep only last 6 messages to cap token cost
     const MAX_HISTORY = 6;
-    const validatedMessages = parsedData.data.messages;
-    const recentMessages = validatedMessages.slice(-MAX_HISTORY);
-    
-    const history = recentMessages.slice(0, -1).map((msg: {role: string, content: string}) => ({
+    const recentMessages = parsed.data.messages.slice(-MAX_HISTORY);
+
+    const history = recentMessages.slice(0, -1).map((msg) => ({
       role: msg.role === "assistant" ? "model" : "user",
       parts: [{ text: msg.content }],
     }));
-    
+
     const latestMessage = recentMessages[recentMessages.length - 1].content;
 
-    // 4. Initialize Gemini
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({
-      model: process.env.GEMINI_MODEL || "gemini-1.5-flash",
+      model: process.env.GEMINI_MODEL || "gemini-2.0-flash",
       systemInstruction: SYSTEM_PROMPT,
-      tools: tools,
+      tools,
       generationConfig: {
-        maxOutputTokens: 250, // Anti-Abuse: Prevent massive output generation
-        temperature: 0.2,     // Lower temperature for more consistent boundaries
+        maxOutputTokens: 250,
+        temperature: 0.2,
       },
     });
 
     const chat = model.startChat({ history });
-
-    // 5. Send message and intercept Tool Calls
     let result = await chat.sendMessage(latestMessage);
 
-    // 6. Handle Tool Calls (Lead Collection Execution)
+    // Handle Tool Calls (Lead Collection)
     const functionCalls = result.response.functionCalls();
     if (functionCalls && functionCalls.length > 0) {
       const call = functionCalls[0];
-      
-      if (call.name === "submitLead") {
-        const lead = call.args as Record<string, string>;
-        try {
-          // Execute Business Logic: Send Lead via Resend
-          await resend.emails.send({
-            from: process.env.RESEND_FROM_EMAIL || "leads@resend.dev",
-            to: process.env.RESEND_TO_EMAIL || "hello@webxexpert.com",
-            subject: `🚀 New Lead: ${lead.name || lead.email}`,
-            text: `
-              NEW WEBXEXPERT LEAD
-              --------------------
-              Name: ${lead.name || "N/A"}
-              Email: ${lead.email}
-              Phone: ${lead.phone || "N/A"}
-              Company: ${lead.company || "N/A"}
-              Budget: ${lead.budget || "N/A"}
-              Timeline: ${lead.timeline || "N/A"}
-              
-              Project Details: 
-              ${lead.projectDetails}
-            `,
-          });
 
-          // Report Success to Gemini
+      if (call.name === "submitLead") {
+        // FIX #6: Validate Gemini's returned args before using them
+        const leadParsed = LeadSchema.safeParse(call.args);
+
+        if (!leadParsed.success) {
           result = await chat.sendMessage([{
             functionResponse: {
               name: "submitLead",
-              response: { success: true, message: "Lead captured successfully. Inform the user Rajesh will email them." }
-            }
+              response: { success: false, message: "Invalid lead data. Ask the user to email hello@webxexpert.com directly." },
+            },
           }]);
-        } catch (error) {
-          console.error("Lead submission failed:", error);
-          // Report Failure to Gemini
-          result = await chat.sendMessage([{
-            functionResponse: {
-              name: "submitLead",
-              response: { success: false, message: "System error. Failed to save lead. Ask the user to email hello@webxexpert.com directly." }
-            }
-          }]);
+        } else {
+          const lead = leadParsed.data;
+          try {
+            await resend.emails.send({
+              from: process.env.RESEND_FROM_EMAIL || "leads@resend.dev",
+              to: process.env.RESEND_TO_EMAIL || "hello@webxexpert.com",
+              subject: `New Lead: ${lead.name || lead.email}`,
+              text: [
+                "NEW WEBXEXPERT LEAD",
+                "--------------------",
+                `Name: ${lead.name || "N/A"}`,
+                `Email: ${lead.email}`,
+                `Phone: ${lead.phone || "N/A"}`,
+                `Company: ${lead.company || "N/A"}`,
+                `Budget: ${lead.budget || "N/A"}`,
+                `Timeline: ${lead.timeline || "N/A"}`,
+                "",
+                "Project Details:",
+                lead.projectDetails,
+              ].join("\n"),
+            });
+
+            result = await chat.sendMessage([{
+              functionResponse: {
+                name: "submitLead",
+                response: { success: true, message: "Lead captured successfully. Inform the user Rajesh will email them." },
+              },
+            }]);
+          } catch (error) {
+            console.error("Lead submission failed:", error);
+            result = await chat.sendMessage([{
+              functionResponse: {
+                name: "submitLead",
+                response: { success: false, message: "System error. Ask the user to email hello@webxexpert.com directly." },
+              },
+            }]);
+          }
         }
       }
     }
 
-    // 7. Secure Return
     const text = result.response.text();
     return NextResponse.json({ reply: text });
 
-  } catch (error: any) {
-    console.error("Secure API Error:", error);
-    // Generic fallback to prevent stack trace leakage
+  } catch (error) {
+    console.error("Chat API error:", error);
     return NextResponse.json(
       { error: "Our system encountered an issue. Please contact hello@webxexpert.com." },
       { status: 500 }
